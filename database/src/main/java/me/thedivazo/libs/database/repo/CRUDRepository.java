@@ -11,7 +11,7 @@ public interface CRUDRepository<T, ID> {
     void delete(T entity);
     void deleteAll();
     void deleteAll(Iterable<? extends T> entities);
-    void deleteAllById(Iterable<? extends T> ids);
+    void deleteAllById(Iterable<? extends ID> ids);
     void deleteById(ID id);
     boolean existsById(ID id);
     Iterable<T> findAll();
