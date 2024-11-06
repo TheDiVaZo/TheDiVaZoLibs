@@ -1,6 +1,8 @@
 package me.thedivazo.libs.database.configsource;
 
+import com.zaxxer.hikari.HikariConfig;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +11,8 @@ import java.util.concurrent.TimeUnit;
  * created on 08.05.2024
  */
 @AllArgsConstructor
-public class HikariConfig {
+@Getter
+public class HikariConfigSourceImpl implements HikariConfigSource {
     private final int minIdle;
     private final int maxPoolSize;
     private final long maxLifeTime;
@@ -18,7 +21,7 @@ public class HikariConfig {
     private final long idleTimeOut;
     private final boolean isAutoCommit;
 
-    public HikariConfig() {
+    public HikariConfigSourceImpl() {
         this.minIdle = 10;
         this.maxPoolSize = 10;
         this.maxLifeTime = TimeUnit.MINUTES.toMillis(30L);
@@ -28,8 +31,9 @@ public class HikariConfig {
         this.isAutoCommit = true;
     }
 
-    public com.zaxxer.hikari.HikariConfig toHikari() {
-        com.zaxxer.hikari.HikariConfig config = new com.zaxxer.hikari.HikariConfig();
+    @Override
+    public HikariConfig toHikari() {
+        HikariConfig config = new com.zaxxer.hikari.HikariConfig();
         config.setAutoCommit(this.isAutoCommit);
         config.setMinimumIdle(this.minIdle);
         config.setMaximumPoolSize(this.maxPoolSize);

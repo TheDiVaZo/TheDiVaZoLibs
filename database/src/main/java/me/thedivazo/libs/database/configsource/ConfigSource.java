@@ -7,9 +7,11 @@ package me.thedivazo.libs.database.configsource;
  * Интерфейс конфигурации, используемая для подключения к базе данных
  */
 public interface ConfigSource {
-    String getUrl();
+    String getHost();
     String getPort();
 
     String getUsername();
     String getPassword();
+
+    String toURL();
 }

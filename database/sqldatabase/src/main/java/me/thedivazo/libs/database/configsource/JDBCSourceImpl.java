@@ -1,6 +1,4 @@
-package me.thedivazo.libs.database.engine;
-
-import lombok.Setter;
+package me.thedivazo.libs.database.configsource;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -15,37 +13,40 @@ import java.util.logging.Logger;
  * @author TheDiVaZo
  * created on 08.05.2024
  */
-public class DefaultJDBCSource implements DataSource {
+public class JDBCSourceImpl implements DataSource, JDBCSource {
+    private final SQLConfigSource source;
     private final String url;
-    @Setter
-    private String username = null;
-    @Setter
-    private String password = null;
-    @Setter
-    private Integer timeOut = null;
-    private PrintWriter writer = System.console().writer();
+    private Integer timeOut;
+    private PrintWriter writer;
 
-    public DefaultJDBCSource(String url, DriverLoader driverLoader) {
-        this.url = url;
-        driverLoader.loadDriver();
+    public JDBCSourceImpl(SQLConfigSource source, Integer timeOut, PrintWriter writer) {
+        this.source = source;
+        this.url = source.toURL();
+        this.timeOut = timeOut;
+        this.writer = writer;
+        source.getDriverLoader().loadDriver();
+    }
+
+    public JDBCSourceImpl(SQLConfigSource source) {
+        this(source, null, System.console().writer());
     }
 
     public Connection getConnection() throws SQLException {
-        return this.getConnection(null, null);
+        return this.getConnection(source.getUsername(), source.getPassword());
     }
 
     public Connection getConnection(String username, String password) throws SQLException {
         Properties properties = new Properties();
-        if (this.username != null) {
-            properties.setProperty("user", this.username);
+        if (username != null) {
+            properties.setProperty("user", username);
         }
 
-        if (this.password != null) {
-            properties.setProperty("password", this.password);
+        if (username != null && password != null) {
+            properties.setProperty("password", password);
         }
 
-        if (this.timeOut != null) {
-            DriverManager.setLoginTimeout(this.timeOut);
+        if (timeOut != null) {
+            DriverManager.setLoginTimeout(timeOut);
         }
 
         Connection connection = DriverManager.getConnection(this.url, properties);
@@ -53,6 +54,7 @@ public class DefaultJDBCSource implements DataSource {
         return connection;
     }
 
+    @Override
     public PrintWriter getLogWriter() throws SQLException {
         return this.writer;
     }
@@ -65,15 +67,18 @@ public class DefaultJDBCSource implements DataSource {
         this.timeOut = seconds;
     }
 
+    @Override
     public int getLoginTimeout() throws SQLException {
         return this.timeOut;
     }
 
+    @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException();
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
         if (iface.isInstance(this)) {
             return (T) this;
@@ -82,6 +87,7 @@ public class DefaultJDBCSource implements DataSource {
         }
     }
 
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return iface.isInstance(this);
     }
