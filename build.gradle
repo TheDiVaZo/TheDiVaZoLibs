@@ -1,28 +1,56 @@
 plugins {
-    id 'groovy'
+    id 'org.checkerframework' version '0.6.19' apply false
+    id "io.freefair.lombok" version "${gradleLombokPlugin}" apply false
 }
 
-group = 'me.thedivazo.libs'
-version = '1.0-SNAPSHOT'
-
-subprojects {
-    apply plugin: 'groovy'
-
+allprojects {
     repositories {
         mavenCentral()
         mavenLocal()
+        maven { url = "https://www.cs.cmu.edu/~mcoblenz/maven2" }
+        // Добавьте другие репозитории, если необходимо
     }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'org.checkerframework'
+    //apply plugin: 'io.freefair.lombok' - вызывает ошибку
 
     dependencies {
-        implementation project(':util')
+        compileOnly project(':util')
 
+        /* CHECKER FRAMEWORK */
+        compileOnly "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
+        annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
+
+        /* LOMBOK */
         compileOnly 'org.projectlombok:lombok:1.18.34'
         annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
         testCompileOnly 'org.projectlombok:lombok:1.18.34'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
+        /* JUNIPITER */
+
         testImplementation platform('org.junit:junit-bom:5.9.1')
         testImplementation 'org.junit.jupiter:junit-jupiter'
+    }
+
+    checkerFramework {
+        checkers = [
+                'org.checkerframework.checker.nullness.NullnessChecker',
+                'org.checkerframework.checker.index.IndexChecker'
+        ]
+        extraJavacArgs = ['-Xlint:all', '-AprintErrorStack']
+    }
+
+    compileJava {
+        options.encoding = "UTF-8" // We want UTF-8 for everything
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }

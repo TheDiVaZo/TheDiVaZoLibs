@@ -1,11 +1,15 @@
 package me.thedivazo.libs.database.configsource;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.util.Map;
 
 /**
  * @author TheDiVaZo
  * created on 31.10.2024
  **/
+@Getter
 @AllArgsConstructor
 public abstract class SQLConfigSourceImpl implements SQLConfigSource {
     private final String databaseName;
@@ -13,29 +17,5 @@ public abstract class SQLConfigSourceImpl implements SQLConfigSource {
     private final String port;
     private final String username;
     private final String password;
-
-    @Override
-    public String getDatabaseName() {
-        return "";
-    }
-
-    @Override
-    public String getHost() {
-        return "";
-    }
-
-    @Override
-    public String getPort() {
-        return "";
-    }
-
-    @Override
-    public String getUsername() {
-        return "";
-    }
-
-    @Override
-    public String getPassword() {
-        return "";
-    }
+    private final Map<String, String> params;
 }

@@ -1,6 +1,6 @@
 rootProject.name = 'TheDiVaZoLibs'
 include 'database'
-include 'database:sqldatabase'
-findProject(':database:sqldatabase')?.name = 'sqldatabase'
+include 'database:sql'
+findProject(':database:sql')?.name = 'sql'
 include 'util'
 

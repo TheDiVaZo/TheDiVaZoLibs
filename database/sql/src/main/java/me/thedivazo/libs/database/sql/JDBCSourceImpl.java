@@ -1,6 +1,7 @@
-package me.thedivazo.libs.database.configsource;
+package me.thedivazo.libs.database.sql;
 
-import javax.sql.DataSource;
+import me.thedivazo.libs.database.configsource.SQLConfigSource;
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
  * @author TheDiVaZo
  * created on 08.05.2024
  */
-public class JDBCSourceImpl implements DataSource, JDBCSource {
+public class JDBCSourceImpl implements JDBCSource {
     private final SQLConfigSource source;
     private final String url;
     private Integer timeOut;
@@ -24,7 +25,7 @@ public class JDBCSourceImpl implements DataSource, JDBCSource {
         this.url = source.toURL();
         this.timeOut = timeOut;
         this.writer = writer;
-        source.getDriverLoader().loadDriver();
+        this.source.getDriverLoader().loadDriver();
     }
 
     public JDBCSourceImpl(SQLConfigSource source) {

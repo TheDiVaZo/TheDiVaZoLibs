@@ -1,5 +1,8 @@
 package me.thedivazo.libs.database.configsource;
 
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * @author TheDiVaZo
  * created on 27.10.2024
@@ -12,6 +15,8 @@ public interface ConfigSource {
 
     String getUsername();
     String getPassword();
+
+    Map<String, String> getParams();
 
     String toURL();
 }

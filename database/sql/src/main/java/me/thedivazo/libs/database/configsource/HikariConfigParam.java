@@ -2,14 +2,16 @@ package me.thedivazo.libs.database.configsource;
 
 import com.zaxxer.hikari.HikariConfig;
 
+import javax.sql.DataSource;
+
 /**
  * @author TheDiVaZo
  * created on 31.10.2024
  * <p>
  * Интерфейс для получения конфигурации HikariCP
  */
-public interface HikariConfigSource {
-    HikariConfig toHikari();
+public interface HikariConfigParam {
+    HikariConfig toHikari(DataSource dataSource);
 
     int getMinIdle();
 

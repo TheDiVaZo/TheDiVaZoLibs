@@ -1,6 +1,6 @@
 package me.thedivazo.libs.database.configsource;
 
-import me.thedivazo.libs.database.engine.DriverLoader;
+import me.thedivazo.libs.database.sql.engine.DriverLoader;
 
 /**
  * @author TheDiVaZo

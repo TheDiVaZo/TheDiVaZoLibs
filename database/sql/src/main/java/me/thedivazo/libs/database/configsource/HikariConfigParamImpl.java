@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 @AllArgsConstructor
 @Getter
-public class HikariConfigSourceImpl implements HikariConfigSource {
+public class HikariConfigParamImpl implements HikariConfigParam {
     private final int minIdle;
     private final int maxPoolSize;
     private final long maxLifeTime;
@@ -21,7 +22,7 @@ public class HikariConfigSourceImpl implements HikariConfigSource {
     private final long idleTimeOut;
     private final boolean isAutoCommit;
 
-    public HikariConfigSourceImpl() {
+    public HikariConfigParamImpl() {
         this.minIdle = 10;
         this.maxPoolSize = 10;
         this.maxLifeTime = TimeUnit.MINUTES.toMillis(30L);
@@ -32,7 +33,7 @@ public class HikariConfigSourceImpl implements HikariConfigSource {
     }
 
     @Override
-    public HikariConfig toHikari() {
+    public HikariConfig toHikari(DataSource dataSource) {
         HikariConfig config = new com.zaxxer.hikari.HikariConfig();
         config.setAutoCommit(this.isAutoCommit);
         config.setMinimumIdle(this.minIdle);
@@ -41,6 +42,7 @@ public class HikariConfigSourceImpl implements HikariConfigSource {
         config.setConnectionTimeout(this.connectionTimeOut);
         config.setValidationTimeout(this.validationTimeout);
         config.setIdleTimeout(this.idleTimeOut);
+        config.setDataSource(dataSource);
         return config;
     }
 }

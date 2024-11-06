@@ -1,0 +1,6 @@
+group = 'me.thedivazo.libs.database.sql'
+version = '1.0-SNAPSHOT'
+
+dependencies {
+    implementation 'com.zaxxer:HikariCP:3.4.5'
+}
