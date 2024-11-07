@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql.factory;
+package me.thedivazo.libs.database.sql.connection.factory;
 
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
 import org.sqlite.SQLiteDataSource;

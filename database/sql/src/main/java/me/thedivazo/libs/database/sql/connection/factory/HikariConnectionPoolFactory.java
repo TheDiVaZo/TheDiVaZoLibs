@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql.factory;
+package me.thedivazo.libs.database.sql.connection.factory;
 
 import com.zaxxer.hikari.HikariConfig;
 import lombok.AllArgsConstructor;

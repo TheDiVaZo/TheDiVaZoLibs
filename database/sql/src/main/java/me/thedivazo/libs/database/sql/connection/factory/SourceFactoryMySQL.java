@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql.factory;
+package me.thedivazo.libs.database.sql.connection.factory;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import me.thedivazo.libs.database.configsource.MonoDatabaseConfig;
