@@ -1,7 +1,6 @@
 package me.thedivazo.libs.database.configsource;
 
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author TheDiVaZo
@@ -9,14 +8,10 @@ import java.util.Properties;
  *
  * Интерфейс конфигурации, используемая для подключения к базе данных
  */
-public interface ConfigSource {
+public interface DatabaseConfig {
     String getHost();
     String getPort();
 
     String getUsername();
     String getPassword();
-
-    Map<String, String> getParams();
-
-    String toURL();
 }

@@ -2,9 +2,7 @@ package me.thedivazo.libs.database.sql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import me.thedivazo.libs.database.configsource.HikariConfigParam;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 

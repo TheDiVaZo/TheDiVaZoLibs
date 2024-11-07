@@ -11,8 +11,6 @@ import javax.sql.DataSource;
  * Интерфейс для получения конфигурации HikariCP
  */
 public interface HikariConfigParam {
-    HikariConfig toHikari(DataSource dataSource);
-
     int getMinIdle();
 
     int getMaxPoolSize();
@@ -26,4 +24,16 @@ public interface HikariConfigParam {
     long getIdleTimeOut();
 
     boolean isAutoCommit();
+
+    default HikariConfig toHikari() {
+        HikariConfig config = new HikariConfig();
+        config.setAutoCommit(isAutoCommit());
+        config.setMinimumIdle(getMinIdle());
+        config.setMaximumPoolSize(getMaxPoolSize());
+        config.setMaxLifetime(getMaxLifeTime());
+        config.setConnectionTimeout(getConnectionTimeOut());
+        config.setValidationTimeout(getValidationTimeout());
+        config.setIdleTimeout(getIdleTimeOut());
+        return config;
+    }
 }

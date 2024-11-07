@@ -11,11 +11,10 @@ import java.util.Map;
  **/
 @Getter
 @AllArgsConstructor
-public abstract class SQLConfigSourceImpl implements SQLConfigSource {
+public class SQLDatabaseConfigImpl implements SQLDatabaseConfig {
     private final String databaseName;
     private final String host;
     private final String port;
     private final String username;
     private final String password;
-    private final Map<String, String> params;
 }

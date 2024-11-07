@@ -31,18 +31,4 @@ public class HikariConfigParamImpl implements HikariConfigParam {
         this.idleTimeOut = TimeUnit.MINUTES.toMillis(10L);
         this.isAutoCommit = true;
     }
-
-    @Override
-    public HikariConfig toHikari(DataSource dataSource) {
-        HikariConfig config = new com.zaxxer.hikari.HikariConfig();
-        config.setAutoCommit(this.isAutoCommit);
-        config.setMinimumIdle(this.minIdle);
-        config.setMaximumPoolSize(this.maxPoolSize);
-        config.setMaxLifetime(this.maxLifeTime);
-        config.setConnectionTimeout(this.connectionTimeOut);
-        config.setValidationTimeout(this.validationTimeout);
-        config.setIdleTimeout(this.idleTimeOut);
-        config.setDataSource(dataSource);
-        return config;
-    }
 }
