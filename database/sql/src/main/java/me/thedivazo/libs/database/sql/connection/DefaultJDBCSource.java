@@ -26,14 +26,14 @@ public class DefaultJDBCSource implements DataSource {
     protected int loginTimeout;
 
     private final String username;
-    private final String passord;
+    private final String password;
 
     private final String url;
 
     protected DefaultJDBCSource(String url, String username, String password, String driverClassName) {
         this.url = url;
         this.username = username;
-        this.passord = password;
+        this.password = password;
         try {
             Class.forName(driverClassName);
         } catch (ClassNotFoundException e) {
@@ -43,7 +43,7 @@ public class DefaultJDBCSource implements DataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return getConnection(username, passord);
+        return getConnection(username, password);
     }
 
     @Override
