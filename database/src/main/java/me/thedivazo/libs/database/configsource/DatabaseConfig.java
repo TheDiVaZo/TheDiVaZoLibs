@@ -1,6 +1,6 @@
 package me.thedivazo.libs.database.configsource;
 
-import java.util.Map;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * @author TheDiVaZo
@@ -8,9 +8,17 @@ import java.util.Map;
  *
  * Интерфейс конфигурации, используемая для подключения к базе данных
  */
+@Nullable
 public interface DatabaseConfig {
-    String getHost();
-    String getPort();
+    /**
+     * Явно установленный URL. Если метод возвращает не null, по этому адресу должно проводится подключение
+     * @return Возвращает прямую ссылку на подключение к бд, либо null
+     */
+    String getUrl();
+
+    default boolean explicitUrl() {
+        return getUrl()!= null && !getUrl().isBlank() && !getUrl().isEmpty();
+    }
 
     String getUsername();
     String getPassword();
