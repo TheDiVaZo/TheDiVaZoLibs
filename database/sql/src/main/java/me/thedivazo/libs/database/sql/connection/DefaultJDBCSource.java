@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql;
+package me.thedivazo.libs.database.sql.connection;
 
 import lombok.Getter;
 import lombok.Setter;

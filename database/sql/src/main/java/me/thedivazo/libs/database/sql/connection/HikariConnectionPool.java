@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql;
+package me.thedivazo.libs.database.sql.connection;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
