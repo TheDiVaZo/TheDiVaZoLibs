@@ -14,17 +14,20 @@ public class SourceFactoryH2<T extends SQLDatabaseConfig & MonoDatabaseConfig> i
     @Override
     public DataSource toDataSource(T config) {
         JdbcDataSource dataSource = new JdbcDataSource();
-        String url;
+        StringBuilder url;
         if (config.explicitUrl()) {
-            url = config.getUrl();
+            url = new StringBuilder(config.getUrl());
         }
         else if (config.getHost() != null && config.getPort() != null) {
-            url = String.format("jdbc:h2:tcp://%s:%s/%s", config.getHost(), config.getPort(), config.getDatabaseName());
+            url = new StringBuilder(String.format("jdbc:h2:tcp://%s:%s/%s", config.getHost(), config.getPort(), config.getDatabaseName()));
         }
         else {
-            url = String.format("jdbc:h2:~/%s", config.getDatabaseName());
+            url = new StringBuilder(String.format("jdbc:h2:~/%s", config.getDatabaseName()));
         }
-        dataSource.setURL(url);
+
+        config.getParams().forEach((key, value) -> url.append(String.format(";%s=%s", key, value)));
+
+        dataSource.setURL(url.toString());
         dataSource.setUser(config.getUsername());
         dataSource.setPassword(config.getPassword());
         return dataSource;

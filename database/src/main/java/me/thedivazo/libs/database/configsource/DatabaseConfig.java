@@ -2,6 +2,8 @@ package me.thedivazo.libs.database.configsource;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Map;
+
 /**
  * @author TheDiVaZo
  * created on 27.10.2024
@@ -19,6 +21,8 @@ public interface DatabaseConfig {
     default boolean explicitUrl() {
         return getUrl()!= null && !getUrl().isBlank() && !getUrl().isEmpty();
     }
+
+    Map<String, String> getParams();
 
     String getUsername();
     String getPassword();

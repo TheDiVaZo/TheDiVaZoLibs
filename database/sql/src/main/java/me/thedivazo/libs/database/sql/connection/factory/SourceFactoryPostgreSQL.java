@@ -22,6 +22,7 @@ public class SourceFactoryPostgreSQL<T extends SQLDatabaseConfig & MultiDatabase
             dataSource.setPortNumbers(Arrays.stream(config.getPorts()).mapToInt(Integer::parseInt).toArray());
             dataSource.setDatabaseName(config.getDatabaseName());
         }
+        //TODO добавить реализацию подключения параметров
         dataSource.setUser(config.getUsername());
         dataSource.setPassword(config.getPassword());
         return dataSource;
