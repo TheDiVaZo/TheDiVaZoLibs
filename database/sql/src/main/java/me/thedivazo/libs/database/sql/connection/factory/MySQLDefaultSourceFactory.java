@@ -11,7 +11,7 @@ import java.util.Map;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SourceFactoryMySQL<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T> {
+public class MySQLDefaultSourceFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T> {
 
     @Override
     public DataSource toDataSource(T config) {

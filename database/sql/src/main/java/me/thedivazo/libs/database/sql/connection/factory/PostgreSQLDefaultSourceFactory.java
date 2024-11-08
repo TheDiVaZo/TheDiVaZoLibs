@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SourceFactoryPostgreSQL<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements DataSourceFactory<T> {
+public class PostgreSQLDefaultSourceFactory<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements DataSourceFactory<T> {
     @Override
     public DataSource toDataSource(T config) {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();

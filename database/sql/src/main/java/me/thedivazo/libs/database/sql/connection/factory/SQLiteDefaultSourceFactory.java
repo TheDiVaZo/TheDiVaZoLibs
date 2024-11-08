@@ -9,7 +9,7 @@ import javax.sql.DataSource;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SourceFactorySQLite<T extends SQLDatabaseConfig> implements DataSourceFactory<T> {
+public class SQLiteDefaultSourceFactory<T extends SQLDatabaseConfig> implements DataSourceFactory<T> {
     @Override
     public DataSource toDataSource(T config) {
         SQLiteDataSource dataSource = new SQLiteDataSource();

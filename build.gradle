@@ -21,6 +21,10 @@ subprojects {
     dependencies {
         compileOnly project(':util')
 
+        // https://mvnrepository.com/artifact/org.jetbrains/annotations
+        compileOnly 'org.jetbrains:annotations:15.0'
+        annotationProcessor 'org.jetbrains:annotations:15.0'
+
         /* CHECKER FRAMEWORK */
         compileOnly "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
         annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
