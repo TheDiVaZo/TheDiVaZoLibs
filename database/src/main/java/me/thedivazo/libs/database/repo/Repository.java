@@ -20,8 +20,6 @@ import java.util.Optional;
  * является типобезопастным.
  */
 public interface Repository<T,ID> {
-    long count();
-
     void delete(T entity);
 
     void deleteAll();

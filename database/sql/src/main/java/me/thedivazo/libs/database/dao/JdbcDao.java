@@ -2,13 +2,20 @@ package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
 import me.thedivazo.libs.util.LazyUncheckedSpliterator;
+import me.thedivazo.libs.util.function.CheckedFunction;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -42,32 +49,47 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     }
 
     @Override
-    public void delete(ID key) {
+    public @Nullable T get(ID id) {
         try {
-            runner.update("DELETE FROM " + tableName + " WHERE " + keyIdentifier + "= ?", key);
+            return runner.query("SELECT * FROM " + tableName + " WHERE " + keyIdentifier + "= ?", resultSetHandler, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deleteAll() {
-        try {
-            runner.update("DELETE FROM " + tableName);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public Stream<@Nullable T> gets(Iterable<? extends ID> ids) {
+        return getAllFromQuery(con->{
+            StringBuilder query = new StringBuilder( "SELECT * FROM ").append(tableName).append(" WHERE ").append(keyIdentifier).append(" IN ");
+            List<ID> preparedIds = new LinkedList<>();
+            query.append("(");
+            boolean isFirst = true;
+            for (ID id : ids) {
+                preparedIds.add(id);
+                if (!isFirst) {
+                    query.append(", ");
+                }
+                else {
+                    isFirst = false;
+                }
+                query.append("?");
+            }
+            query.append(")");
+            PreparedStatement preparedStatement = con.prepareStatement(query.toString());
+            runner.fillStatement(preparedStatement, preparedIds.toArray());
+            return preparedStatement;
+        });
     }
 
     @Override
-    public Stream<T> getAllInStream() {
-        return getAllInStreamFromQuery("SELECT * FROM " + tableName);
+    public Stream<T> getAll() {
+        return getAllFromQuery( con-> con.prepareStatement("SELECT * FROM " + tableName));
     }
 
-    protected Stream<T> getAllInStreamFromQuery(String query) {
+    protected Stream<T> getAllFromQuery(CheckedFunction<Connection, PreparedStatement, SQLException> preparedStatementGetter) {
         try {
             final Connection connection = pool.getConnection();
-            final PreparedStatement ps = connection.prepareStatement(query);
+            final PreparedStatement ps = preparedStatementGetter.apply(connection);
             final ResultSet rs = ps.executeQuery();
             return StreamSupport.stream(new LazyUncheckedSpliterator<T>(action -> {
                 if (!rs.next()) {
@@ -88,6 +110,48 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
                     throw new RuntimeException(e);
                 }
             });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(ID id) {
+        try {
+            runner.update("DELETE FROM " + tableName + " WHERE " + keyIdentifier + "= ?", id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deletes(Iterable<? extends ID> ids) {
+        try {
+            StringBuilder query = new StringBuilder( "DELETE FROM ").append(tableName).append(" WHERE ").append(keyIdentifier).append(" IN ");
+            List<ID> preparedIds = new LinkedList<>();
+            query.append("(");
+            boolean isFirst = true;
+            for (ID id : ids) {
+                preparedIds.add(id);
+                if (!isFirst) {
+                    query.append(", ");
+                }
+                else {
+                    isFirst = false;
+                }
+                query.append("?");
+            }
+            query.append(")");
+            runner.update(query.toString(), preparedIds.toArray());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        try {
+            runner.update("DELETE FROM " + tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

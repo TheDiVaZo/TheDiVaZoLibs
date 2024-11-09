@@ -2,8 +2,6 @@ package me.thedivazo.libs.database.dao;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -14,17 +12,30 @@ import java.util.stream.Stream;
  **/
 public interface Dao<T, ID> {
     void insert(T entity);
+    void inserts(Iterable<? extends T> entities);
 
     void upsert(T entity);
+    void upserts(Iterable<? extends T> entities);
 
     void delete(ID key);
-
-    void update(T entity);
-
+    void deletes(Iterable<? extends ID> keys);
     void deleteAll();
 
+    void update(T entity);
+    void updates(Iterable<? extends T> entities);
+
     @Nullable
-    T get(ID key);
+    T get(ID id);
+
+    /**
+     * Реализация данного метода возвращает {@link Stream<T>},
+     * который лениво получает данные из базы и не закрывает соединение до тех пор,
+     * пока будет явно не вызван метод {@link Stream#close()}
+     * или пока данные сами не закончат поступать.
+     * @param ids объект содержащий идентификаторы.
+     * @return стрим с сущностями в порядке получения идентификаторов из аргумента. Может содержать null'ы, если в итератор в аргументе может возвратить id, которых в базе нет
+     */
+    Stream<@Nullable T> gets(Iterable<? extends ID> ids);
 
     ID getId(T entity);
 
@@ -36,9 +47,5 @@ public interface Dao<T, ID> {
      *
      * @return {@link Stream<T>} с сущностями
      */
-    Stream<T> getAllInStream();
-
-    default Optional<T> findOne(Predicate<T> predicate) {
-        return getAllInStream().filter(predicate).findFirst();
-    }
+    Stream<T> getAll();
 }

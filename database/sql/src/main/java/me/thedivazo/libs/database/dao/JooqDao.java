@@ -1,12 +1,14 @@
 package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
+import me.thedivazo.libs.util.IterableUtil;
 import me.thedivazo.libs.util.LazyUncheckedSpliterator;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -32,17 +34,19 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     protected final RecordMapper<? super Record, T> recordMapper;
     protected final Table<?> tableName;
     protected final Field<ID> keyIdentifier;
+    protected final Class<ID> idClass;
 
-    protected JooqDao(Table<?> tableName, Field<ID> keyIdentifier, ConnectionPool pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
+    protected JooqDao(Table<?> tableName, Field<ID> keyIdentifier, Class<ID> idClass, ConnectionPool pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
         this.pool = pool;
         this.sqlDialect = sqlDialect;
         this.recordMapper = recordMapper;
         this.tableName = tableName;
         this.keyIdentifier = keyIdentifier;
+        this.idClass = idClass;
     }
 
-    protected JooqDao(String tableName, String keyIdentifier, Class<ID> clazzId, ConnectionPool pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
-        this(DSL.table(DSL.name(tableName)), DSL.field(DSL.name(keyIdentifier), clazzId), pool, sqlDialect, recordMapper);
+    protected JooqDao(String tableName, String keyIdentifier, Class<ID> idClass, ConnectionPool pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
+        this(DSL.table(DSL.name(tableName)), DSL.field(DSL.name(keyIdentifier), idClass), idClass, pool, sqlDialect, recordMapper);
     }
 
     protected DSLContext getDslContext(Connection connection) {
@@ -50,17 +54,36 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     }
 
     @Override
-    public void deleteAll(Condition condition) {
+    public @Nullable T get(ID id) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            dslContext.deleteFrom(tableName).where(condition).execute();
+            return dslContext.selectFrom(tableName).where(keyIdentifier.eq(id)).fetchOne(recordMapper);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Stream<T> getAllInStream(Condition condition) {
+    public Stream<@Nullable T> gets(Iterable<? extends ID> ids) {
+        return getAll(keyIdentifier.in(IterableUtil.toArray(ids, idClass)));
+    }
+
+    @Override
+    public T getBy(@Nullable Condition predicate) {
+        try (Connection connection = pool.getConnection()) {
+            DSLContext dslContext = getDslContext(connection);
+            Select<?> query = dslContext.selectFrom(tableName);
+            if (predicate != null) {
+                query = ((SelectWhereStep<?>) query).where(predicate);
+            }
+            return query.fetchOne(recordMapper);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Stream<T> getAll(Condition condition) {
         try {
             final Connection connection = pool.getConnection();
             final DSLContext dslContext = getDslContext(connection);
@@ -89,15 +112,25 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     }
 
     @Override
-    public Optional<T> findOne(@Nullable Condition predicate) {
+    public Stream<T> getAll() {
+        return getAll(null);
+    }
+
+    @Override
+    public void delete(ID key) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            Select<?> query = dslContext.selectFrom(tableName);
-            if (predicate != null) {
-                query = ((SelectWhereStep<?>) query).where(predicate);
-            }
-            T entity = query.fetchOne(recordMapper);
-            return Optional.ofNullable(entity);
+            dslContext.deleteFrom(tableName).where(keyIdentifier.eq(key)).execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deletes(Iterable<? extends ID> keys) {
+        try (Connection connection = pool.getConnection()) {
+            DSLContext dslContext = getDslContext(connection);
+            dslContext.deleteFrom(tableName).where(keyIdentifier.in(IterableUtil.toArray(keys, idClass))).execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -114,15 +147,10 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     }
 
     @Override
-    public Stream<T> getAllInStream() {
-        return getAllInStream(null);
-    }
-
-    @Override
-    public void delete(ID key) {
+    public void deleteAll(Condition condition) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            dslContext.deleteFrom(tableName).where(keyIdentifier.eq(key)).execute();
+            dslContext.deleteFrom(tableName).where(condition).execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

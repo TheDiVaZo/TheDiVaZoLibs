@@ -3,7 +3,11 @@ package me.thedivazo.libs.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.IntFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +41,19 @@ public final class IterableUtil {
     public static <T> Stream<T> toStream(Iterable<T> iterable) {
         return toStream(iterable, false);
     }
+
     public static <T> Stream<T> toStream(Iterable<T> iterable, boolean isParallel) {
         return StreamSupport.stream(iterable.spliterator(), false);
+    }
+
+    public static  <T> T[] toArray(Iterable<? extends T> iterable, IntFunction<T[]> generator) {
+        List<T> list = new LinkedList<>();
+        iterable.forEach(list::add);
+        return list.toArray(generator);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T[] toArray(Iterable<? extends T> iterable, Class<T> clazz) {
+        return toArray(iterable, size-> (T[]) Array.newInstance(clazz, size));
     }
 }

@@ -1,6 +1,6 @@
 package me.thedivazo.libs.util;
 
-import me.thedivazo.libs.util.function.UncheckedPredicate;
+import me.thedivazo.libs.util.function.CheckedPredicate;
 
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -11,9 +11,9 @@ import java.util.function.Consumer;
  * created on 08.11.2024
  **/
 public class LazyUncheckedSpliterator<T> extends Spliterators.AbstractSpliterator<T> {
-    protected final UncheckedPredicate<Consumer<? super T>> tryAdvancer;
+    protected final CheckedPredicate<Consumer<? super T>> tryAdvancer;
 
-    public LazyUncheckedSpliterator(UncheckedPredicate<Consumer<? super T>> tryAdvancer) {
+    public LazyUncheckedSpliterator(CheckedPredicate<Consumer<? super T>> tryAdvancer) {
         super(Long.MAX_VALUE, Spliterator.ORDERED | Spliterator.NONNULL | Spliterator.IMMUTABLE);
         this.tryAdvancer = tryAdvancer;
     }
