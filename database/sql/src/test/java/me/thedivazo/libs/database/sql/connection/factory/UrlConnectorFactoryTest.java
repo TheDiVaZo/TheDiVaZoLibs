@@ -21,7 +21,7 @@ class UrlConnectorFactoryTest {
 
     @Test
     void testMysqlUrlGenerated() {
-        MysqlUrlFactory<TestSqlConfig> sourceFactory = new MysqlUrlFactory<>();
+        MysqlJdbcUrlFactory<TestSqlConfig> sourceFactory = new MysqlJdbcUrlFactory<>();
         String actual = sourceFactory.createUrlConnection(configWithNoUrl);
         String expected = "jdbc:mysql://host:port/database?anyoneParam=anyoneValue";
         assertEquals(expected, actual);
@@ -29,7 +29,7 @@ class UrlConnectorFactoryTest {
 
     @Test
     void testH2UrlGenerated() {
-        H2UrlFactory<TestSqlConfig> sourceFactory = new H2UrlFactory<>();
+        H2JdbcUrlFactory<TestSqlConfig> sourceFactory = new H2JdbcUrlFactory<>();
         String actual = sourceFactory.createUrlConnection(configWithNoUrl);
         String expected = "jdbc:h2:tcp://host:port/database;anyoneParam=anyoneValue";
         assertEquals(expected, actual);
@@ -37,7 +37,7 @@ class UrlConnectorFactoryTest {
 
     @Test
     void testPostgreSqlUrlGenerated() {
-        PostgreSqlUrlFactory<TestSqlConfig> sourceFactory = new PostgreSqlUrlFactory<>();
+        PostgreSqlJdbcUrlFactory<TestSqlConfig> sourceFactory = new PostgreSqlJdbcUrlFactory<>();
         String actual = sourceFactory.createUrlConnection(configWithNoUrl);
         String expected = "jdbc:postgresql://host1:port1,host2:port2/database?anyoneParam=anyoneValue";
         assertEquals(expected, actual);
@@ -45,7 +45,7 @@ class UrlConnectorFactoryTest {
 
     @Test
     void testSQLiteUrlGenerated() {
-        SQLiteUrlFactory<TestSqlConfig> sourceFactory = new SQLiteUrlFactory<>();
+        SQLiteJdbcUrlFactory<TestSqlConfig> sourceFactory = new SQLiteJdbcUrlFactory<>();
         String actual = sourceFactory.createUrlConnection(configWithNoUrl);
         String expected = "jdbc:sqlite:database?anyoneParam=anyoneValue";
         assertEquals(expected, actual);

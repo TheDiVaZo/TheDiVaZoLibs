@@ -7,7 +7,7 @@ import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class H2UrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements UrlConnectFactory<T> {
+public class H2JdbcUrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements JdbcUrlFactory<T> {
 
     protected boolean validConfig(T config) {
         if (config.explicitUrl()) return true;

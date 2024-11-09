@@ -8,7 +8,7 @@ import me.thedivazo.libs.util.UrlDatabaseUtil;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SQLiteUrlFactory<T extends SQLDatabaseConfig> extends DefaultJDBCSource implements UrlConnectFactory<T> {
+public class SQLiteJdbcUrlFactory<T extends SQLDatabaseConfig> extends DefaultJDBCSource implements JdbcUrlFactory<T> {
 
     @Override
     public String createUrlConnection(T config) {

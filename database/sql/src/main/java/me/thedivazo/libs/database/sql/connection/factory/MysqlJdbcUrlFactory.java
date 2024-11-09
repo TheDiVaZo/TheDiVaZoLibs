@@ -8,7 +8,7 @@ import me.thedivazo.libs.util.UrlDatabaseUtil;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class MysqlUrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements UrlConnectFactory<T> {
+public class MysqlJdbcUrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements JdbcUrlFactory<T> {
 
     protected boolean validConfig(T config) {
         if (config.explicitUrl()) return true;
