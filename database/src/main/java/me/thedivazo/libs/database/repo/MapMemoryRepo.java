@@ -9,8 +9,7 @@ import me.thedivazo.libs.util.IterableUtil;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Репозиторий, использующий ConcurrentSkipListMap в качестве хранилища.
@@ -25,9 +24,9 @@ import java.util.stream.Collectors;
  * @param <ID> Идентификатор сущности
  */
 @RequiredArgsConstructor
-public class MapMemoryRepo<T, ID> implements Repository<T, ID>, PagingRepository<T, ID> {
+public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
 
-    private final Map<ID, T> localStorage = new ConcurrentSkipListMap<>();
+    private final Map<ID, T> localStorage = new ConcurrentHashMap<>();
     private final NextIdGenerator<ID> nextIdGenerator;
     private final EntityIdentifier<T> entityIdentifier;
     private final Cloner<T> cloner;
@@ -69,7 +68,7 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID>, PagingRepository
 
     @Override
     public Iterable<T> findAll() {
-        return localStorage.values().stream().map(cloner::<T>clone).collect(Collectors.toList());
+        return localStorage.values().stream().map(cloner::<T>clone).toList();
     }
 
     @Override
@@ -78,7 +77,7 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID>, PagingRepository
         return localStorage.entrySet().stream()
                 .filter(entry -> idCollection.contains(entry.getKey()))
                 .map(entry->cloner.<T>clone(entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -105,15 +104,6 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID>, PagingRepository
     public <E extends T> Iterable<E> saveAll(Iterable<E> entities) {
         return IterableUtil.toStream(entities)
                .map(entity->cloner.<E>clone(save(entity)))
-               .collect(Collectors.toList());
-    }
-
-    @Override
-    public Iterable<T> findAll(int pageNumber, int pageSize) {
-        return localStorage.entrySet().stream()
-                .skip((long) (pageNumber - 1) * pageSize)
-                .limit(pageSize)
-                .map(entry->cloner.<T>clone(entry.getValue()))
-                .collect(Collectors.toList());
+               .toList();
     }
 }

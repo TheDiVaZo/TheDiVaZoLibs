@@ -2,7 +2,6 @@ package me.thedivazo.libs.database.sql.connection;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -17,28 +16,26 @@ import java.util.logging.Logger;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
+@Getter
+@Setter
 public class DefaultJDBCSource implements DataSource {
-    @Getter
-    @Setter
     protected PrintWriter logWriter;
-    @Getter
-    @Setter
     protected int loginTimeout;
+    private String username;
+    private String password;
 
-    private final String username;
-    private final String password;
+    private String url;
 
-    private final String url;
-
-    protected DefaultJDBCSource(String url, String username, String password, String driverClassName) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
+    public DefaultJDBCSource(String driverClassName) {
         try {
             Class.forName(driverClassName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver has not been loaded",e);
         }
+    }
+
+    public DefaultJDBCSource() {
+
     }
 
     @Override
@@ -47,7 +44,7 @@ public class DefaultJDBCSource implements DataSource {
     }
 
     @Override
-    public Connection getConnection(@NonNull String username, @NonNull String password) throws SQLException {
+    public Connection getConnection(String username, String password) throws SQLException {
         Properties properties = new Properties();
         properties.setProperty("user", username);
         properties.setProperty("password", password);
@@ -68,7 +65,7 @@ public class DefaultJDBCSource implements DataSource {
         }
     }
 
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    public boolean isWrapperFor(Class<?> iface) {
         return iface.isInstance(this);
     }
 

@@ -2,9 +2,9 @@ package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
 import me.thedivazo.libs.util.LazyUncheckedSpliterator;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jooq.*;
+import org.jetbrains.annotations.Nullable;
 import org.jooq.Record;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.sql.Connection;

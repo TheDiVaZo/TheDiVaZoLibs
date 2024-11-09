@@ -1,12 +1,23 @@
 package me.thedivazo.libs.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Collection;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IterableUtil {
+    public static final Iterable<?> EMPY_ITERABLE = new EmptyIterable<>();
+
+    @SuppressWarnings("unchecked")
+    public static <T> Iterable<T> emptyIterator() {
+        return (Iterable<T>) EMPY_ITERABLE;
+    }
+
     public static <T> Collection<T> toCollection(Iterable<T> iterable) {
         return toCollection(iterable, false);
     }

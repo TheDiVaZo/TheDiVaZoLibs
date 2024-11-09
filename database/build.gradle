@@ -1,8 +1,6 @@
 group = 'me.thedivazo.libs.database'
 version = '1.0-SNAPSHOT'
 
-allprojects {
-    dependencies {
-        compileOnly project(":database")
-    }
+dependencies {
+    compileOnly project(":util")
 }

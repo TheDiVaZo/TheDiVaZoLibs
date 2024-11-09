@@ -2,23 +2,29 @@ package me.thedivazo.libs.database.sql.connection.factory;
 
 import me.thedivazo.libs.database.configsource.MultiDatabaseConfig;
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
-import me.thedivazo.libs.database.util.UrlDatabaseUtil;
-import org.postgresql.ds.PGSimpleDataSource;
+import me.thedivazo.libs.util.UrlDatabaseUtil;
 
-import javax.sql.DataSource;
 import java.util.Objects;
 
 /**
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class PostgreSQLSourceFactory<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements DataSourceFactory<T> {
+public class PostgreSqlUrlFactory<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements UrlConnectFactory<T> {
     protected static final String DEFAULT_PORT = "5432";
 
-    @Override
-    public DataSource toDataSource(T config) {
-        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+    protected boolean validConfig(T config) {
+        if (config.explicitUrl()) return true;
+        return config.getHosts() != null &&
+                config.getPorts() != null &&
+                config.getDatabaseName() != null;
+    }
 
+    @Override
+    public String createUrlConnection(T config) {
+        if (!validConfig(config)) {
+            throw new IllegalArgumentException("Invalid PostgreSQL configuration");
+        }
         String url = config.getUrl();
         if (!config.explicitUrl()) {
             StringBuilder urlBuilder = new StringBuilder("jdbc:postgresql://");
@@ -41,9 +47,12 @@ public class PostgreSQLSourceFactory<T extends SQLDatabaseConfig & MultiDatabase
             urlBuilder.append(UrlDatabaseUtil.generateUrlParams(config.getParams()));
             url = urlBuilder.toString();
         }
-        dataSource.setURL(url);
-        dataSource.setUser(config.getUsername());
-        dataSource.setPassword(config.getPassword());
-        return dataSource;
+
+        return url;
+    }
+
+    @Override
+    public String getDriverClassName() {
+        return  "org.postgresql.Driver";
     }
 }

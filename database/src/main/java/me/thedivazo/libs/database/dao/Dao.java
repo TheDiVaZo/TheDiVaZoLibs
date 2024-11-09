@@ -1,6 +1,6 @@
 package me.thedivazo.libs.database.dao;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Predicate;

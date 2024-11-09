@@ -1,4 +1,7 @@
-package me.thedivazo.libs.database.util;
+package me.thedivazo.libs.util;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -8,6 +11,7 @@ import java.util.Map;
  * @author TheDiVaZo
  * created on 09.11.2024
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UrlDatabaseUtil {
     public static String generateUrlParams(Map<String, String> params) {
         StringBuilder urlBuilder = new StringBuilder();

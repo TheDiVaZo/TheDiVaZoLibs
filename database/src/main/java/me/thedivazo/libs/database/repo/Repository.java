@@ -19,7 +19,7 @@ import java.util.Optional;
  * фильтрацию поиска, можно, т.к. доступ к базе контролируется и такой способ
  * является типобезопастным.
  */
-public interface Repository<T, ID> {
+public interface Repository<T,ID> {
     long count();
 
     void delete(T entity);

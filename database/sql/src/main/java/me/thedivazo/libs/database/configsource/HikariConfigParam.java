@@ -1,6 +1,7 @@
 package me.thedivazo.libs.database.configsource;
 
 import com.zaxxer.hikari.HikariConfig;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sql.DataSource;
 
@@ -10,6 +11,7 @@ import javax.sql.DataSource;
  * <p>
  * Интерфейс для получения конфигурации HikariCP
  */
+@Nullable
 public interface HikariConfigParam {
     int getMinIdle();
 

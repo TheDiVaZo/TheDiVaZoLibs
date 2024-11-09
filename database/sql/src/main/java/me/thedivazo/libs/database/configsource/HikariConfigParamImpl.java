@@ -3,6 +3,7 @@ package me.thedivazo.libs.database.configsource;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 @AllArgsConstructor
 @Getter
+@NotNull
 public class HikariConfigParamImpl implements HikariConfigParam {
     private final int minIdle;
     private final int maxPoolSize;

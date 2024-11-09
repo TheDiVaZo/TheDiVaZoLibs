@@ -1,6 +1,7 @@
 package me.thedivazo.libs.database.configsource;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public interface DatabaseConfig {
         return getUrl()!= null && !getUrl().isBlank() && !getUrl().isEmpty();
     }
 
+    @NotNull
     Map<String, String> getParams();
 
     String getUsername();
