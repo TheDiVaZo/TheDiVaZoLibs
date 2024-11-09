@@ -38,7 +38,7 @@ public interface Repository<T,ID> {
 
     Optional<T> findById(ID id);
 
-    <E extends T> E save(E entity);
+    void save(T entity);
 
-    <E extends T> Iterable<E> saveAll(Iterable<E> entities);
+    void saveAll(Iterable<T> entities);
 }

@@ -2,6 +2,7 @@ package me.thedivazo.libs.database.repo;
 
 import lombok.AllArgsConstructor;
 import me.thedivazo.libs.database.dao.Dao;
+import me.thedivazo.libs.util.IterableUtil;
 
 import java.util.Optional;
 
@@ -25,12 +26,12 @@ public class DaoRepoImpl<T, ID> implements Repository<T, ID> {
 
     @Override
     public void deleteAll(Iterable<? extends T> entities) {
-        entities.forEach(this::delete);
+        deleteAllById(IterableUtil.toStream(entities).map(dao::getId).toList());
     }
 
     @Override
     public void deleteAllById(Iterable<? extends ID> ids) {
-        ids.forEach(this::deleteById);
+        dao.deletes(ids);
     }
 
     @Override
@@ -50,21 +51,21 @@ public class DaoRepoImpl<T, ID> implements Repository<T, ID> {
 
     @Override
     public Iterable<T> findAllById(Iterable<? extends ID> ids) {
-        return dao.getAll().filter(entity-> entity);
+        return dao.gets(ids).toList();
     }
 
     @Override
     public Optional<T> findById(ID id) {
-        return Optional.empty();
+        return Optional.ofNullable(dao.get(id));
     }
 
     @Override
-    public <E extends T> E save(E entity) {
-        return null;
+    public void save(T entity) {
+        dao.upsert(entity);
     }
 
     @Override
-    public <E extends T> Iterable<E> saveAll(Iterable<E> entities) {
-        return null;
+    public void saveAll(Iterable<T> entities) {
+        dao.upserts(entities);
     }
 }

@@ -31,10 +31,6 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
     private final EntityIdentifier<T> entityIdentifier;
     private final Cloner<T> cloner;
 
-    @Override
-    public long count() {
-        return localStorage.size();
-    }
 
     @Override
     public void delete(T entity) {
