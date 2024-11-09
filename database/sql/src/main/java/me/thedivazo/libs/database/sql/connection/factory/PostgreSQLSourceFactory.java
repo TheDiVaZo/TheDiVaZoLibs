@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SourceFactoryPostgreSQL<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements DataSourceFactory<T> {
+public class PostgreSQLSourceFactory<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements DataSourceFactory<T> {
     protected static final String DEFAULT_PORT = "5432";
 
     @Override
