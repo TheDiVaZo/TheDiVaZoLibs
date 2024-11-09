@@ -1,32 +1,29 @@
 package me.thedivazo.libs.database.sql.connection.factory;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import me.thedivazo.libs.database.configsource.MonoDatabaseConfig;
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
 import me.thedivazo.libs.database.util.UrlDatabaseUtil;
+import org.sqlite.SQLiteDataSource;
 
 import javax.sql.DataSource;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SourceFactoryMySQL<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T> {
-
+public class SQLiteDefaultSourceFactory<T extends SQLDatabaseConfig> implements DataSourceFactory<T> {
     @Override
     public DataSource toDataSource(T config) {
-        MysqlDataSource dataSource = new MysqlDataSource();
+        SQLiteDataSource dataSource = new SQLiteDataSource();
         String url = config.getUrl();
         if (!config.explicitUrl()) {
-            StringBuilder urlBuilder = new StringBuilder(String.format("jdbc:mysql://%s:%s/%s", config.getHost(), config.getPort(), config.getDatabaseName()));
+            StringBuilder urlBuilder = new StringBuilder(String.format("jdbc:sqlite:%s", config.getDatabaseName()));
             urlBuilder.append(UrlDatabaseUtil.generateUrlParams(config.getParams()));
-
             url = urlBuilder.toString();
         }
-        dataSource.setURL(url);
-        dataSource.setUser(config.getUsername());
-        dataSource.setPassword(config.getPassword());
+        dataSource.setUrl(url);
         return dataSource;
     }
 }

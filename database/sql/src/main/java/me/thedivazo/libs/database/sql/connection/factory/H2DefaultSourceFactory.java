@@ -10,7 +10,7 @@ import javax.sql.DataSource;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class SourceFactoryH2<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T>  {
+public class H2DefaultSourceFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T> {
     @Override
     public DataSource toDataSource(T config) {
         JdbcDataSource dataSource = new JdbcDataSource();

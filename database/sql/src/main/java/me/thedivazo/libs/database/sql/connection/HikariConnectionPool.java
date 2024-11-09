@@ -27,7 +27,7 @@ public class HikariConnectionPool implements ConnectionPool {
     }
 
     @Override
-    public HikariDataSource getPoolDataSource() {
+    public HikariDataSource getPooledDataSource() {
         return dataSource;
     }
 

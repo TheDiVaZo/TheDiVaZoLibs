@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @param <ID> Идентификатор сущности
  */
 @RequiredArgsConstructor
-public class MapMemoryRepo<T, ID> implements CRUDRepository<T, ID>, PagingRepository<T, ID> {
+public class MapMemoryRepo<T, ID> implements Repository<T, ID>, PagingRepository<T, ID> {
 
     private final Map<ID, T> localStorage = new ConcurrentSkipListMap<>();
     private final NextIdGenerator<ID> nextIdGenerator;
