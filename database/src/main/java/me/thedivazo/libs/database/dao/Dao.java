@@ -9,20 +9,23 @@ import java.util.stream.Stream;
  * created on 08.11.2024
  * <p>
  * Представляет собой интерфейс для прямого доступа и взаимодействия с базой данных
+ *
+ * @param <T> Entity объект. Представляет собой отображение записи в базе
+ * @param <ID> Объект идентификатора
  **/
 public interface Dao<T, ID> {
-    void insert(T entity);
-    void inserts(Iterable<? extends T> entities);
+    ID insert(T entity);
+    Iterable<ID> inserts(Iterable<? extends T> entities);
 
-    void upsert(T entity);
-    void upserts(Iterable<? extends T> entities);
+    ID upsert(T entity);
+    Iterable<ID> upserts(Iterable<? extends T> entities);
 
-    void delete(ID key);
-    void deletes(Iterable<? extends ID> keys);
-    void deleteAll();
+    boolean delete(ID key);
+    int deletes(Iterable<? extends ID> keys);
+    int deletesAll();
 
-    void update(T entity);
-    void updates(Iterable<? extends T> entities);
+    boolean update(T entity);
+    int updates(Iterable<? extends T> entities);
 
     @Nullable
     T get(ID id);
@@ -47,5 +50,5 @@ public interface Dao<T, ID> {
      *
      * @return {@link Stream<T>} с сущностями
      */
-    Stream<T> getAll();
+    Stream<T> getsAll();
 }

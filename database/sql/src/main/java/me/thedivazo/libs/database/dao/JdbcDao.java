@@ -58,7 +58,7 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     }
 
     @Override
-    public Stream<@Nullable T> gets(Iterable<? extends ID> ids) {
+    public Stream<T> gets(Iterable<? extends ID> ids) {
         return getAllFromQuery(con->{
             StringBuilder query = new StringBuilder( "SELECT * FROM ").append(tableName).append(" WHERE ").append(keyIdentifier).append(" IN ");
             List<ID> preparedIds = new LinkedList<>();
@@ -82,7 +82,7 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     }
 
     @Override
-    public Stream<T> getAll() {
+    public Stream<T> getsAll() {
         return getAllFromQuery( con-> con.prepareStatement("SELECT * FROM " + tableName));
     }
 
@@ -116,16 +116,17 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     }
 
     @Override
-    public void delete(ID id) {
+    public boolean delete(ID id) {
         try {
-            runner.update("DELETE FROM " + tableName + " WHERE " + keyIdentifier + "= ?", id);
+            int count = runner.update("DELETE FROM " + tableName + " WHERE " + keyIdentifier + "= ?", id);
+            return count > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deletes(Iterable<? extends ID> ids) {
+    public int deletes(Iterable<? extends ID> ids) {
         try {
             StringBuilder query = new StringBuilder( "DELETE FROM ").append(tableName).append(" WHERE ").append(keyIdentifier).append(" IN ");
             List<ID> preparedIds = new LinkedList<>();
@@ -142,16 +143,16 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
                 query.append("?");
             }
             query.append(")");
-            runner.update(query.toString(), preparedIds.toArray());
+            return runner.update(query.toString(), preparedIds.toArray());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deleteAll() {
+    public int deletesAll() {
         try {
-            runner.update("DELETE FROM " + tableName);
+            return runner.update("DELETE FROM " + tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

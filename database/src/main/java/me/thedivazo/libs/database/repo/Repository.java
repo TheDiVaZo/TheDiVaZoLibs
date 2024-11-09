@@ -13,18 +13,21 @@ import java.util.Optional;
  * Не должен предоставлять прямой доступ к базе данных.
  * Например: создание метода findBy(String sql) который принимает строку sql
  * нельзя, т.к. при таком подходе репозиторий не сможет контролировать
- * доступ к базе и это не типобезопастно.
+ * доступ к базе и это не безопастно.
  *
- * А метод findBy(EntityCondition condition), принимающий некий объект отвечающий за
+ * А метод findBy(DtoCondition condition), принимающий некий объект отвечающий за
  * фильтрацию поиска, можно, т.к. доступ к базе контролируется и такой способ
- * является типобезопастным.
+ * является безопасным.
+ *
+ * @param <T> DTO объект
+ * @param <ID> Объект идентификатора
  */
 public interface Repository<T,ID> {
-    void delete(T entity);
+    void delete(T dto);
 
     void deleteAll();
 
-    void deleteAll(Iterable<? extends T> entities);
+    void deleteAll(Iterable<? extends T> dtos);
 
     void deleteAllById(Iterable<? extends ID> ids);
 
@@ -38,7 +41,7 @@ public interface Repository<T,ID> {
 
     Optional<T> findById(ID id);
 
-    void save(T entity);
+    ID save(T dto);
 
-    void saveAll(Iterable<T> entities);
+    Iterable<ID> saveAll(Iterable<T> dtos);
 }

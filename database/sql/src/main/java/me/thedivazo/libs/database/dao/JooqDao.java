@@ -8,10 +8,8 @@ import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -65,7 +63,7 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
 
     @Override
     public Stream<@Nullable T> gets(Iterable<? extends ID> ids) {
-        return getAll(keyIdentifier.in(IterableUtil.toArray(ids, idClass)));
+        return getsBy(keyIdentifier.in(IterableUtil.toArray(ids, idClass)));
     }
 
     @Override
@@ -83,7 +81,7 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     }
 
     @Override
-    public Stream<T> getAll(Condition condition) {
+    public Stream<T> getsBy(Condition condition) {
         try {
             final Connection connection = pool.getConnection();
             final DSLContext dslContext = getDslContext(connection);
@@ -112,45 +110,46 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     }
 
     @Override
-    public Stream<T> getAll() {
-        return getAll(null);
+    public Stream<T> getsAll() {
+        return getsBy(null);
     }
 
     @Override
-    public void delete(ID key) {
+    public boolean delete(ID key) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            dslContext.deleteFrom(tableName).where(keyIdentifier.eq(key)).execute();
+            int count = dslContext.deleteFrom(tableName).where(keyIdentifier.eq(key)).execute();
+            return count > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deletes(Iterable<? extends ID> keys) {
+    public int deletes(Iterable<? extends ID> keys) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            dslContext.deleteFrom(tableName).where(keyIdentifier.in(IterableUtil.toArray(keys, idClass))).execute();
+            return dslContext.deleteFrom(tableName).where(keyIdentifier.in(IterableUtil.toArray(keys, idClass))).execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deleteAll() {
+    public int deletesAll() {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            dslContext.deleteFrom(tableName).execute();
+            return dslContext.deleteFrom(tableName).execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deleteAll(Condition condition) {
+    public int deletesBy(Condition condition) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            dslContext.deleteFrom(tableName).where(condition).execute();
+            return dslContext.deleteFrom(tableName).where(condition).execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

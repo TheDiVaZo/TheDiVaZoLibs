@@ -33,8 +33,8 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
 
 
     @Override
-    public void delete(T entity) {
-        localStorage.values().remove(entity);
+    public void delete(T dto) {
+        localStorage.values().remove(dto);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends T> entities) {
-        localStorage.values().removeAll(IterableUtil.toCollection(entities));
+    public void deleteAll(Iterable<? extends T> dtos) {
+        localStorage.values().removeAll(IterableUtil.toCollection(dtos));
     }
 
     @Override
