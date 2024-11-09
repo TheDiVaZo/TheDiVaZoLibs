@@ -3,6 +3,7 @@ package me.thedivazo.libs.database.sql.connection.factory;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import me.thedivazo.libs.database.configsource.MonoDatabaseConfig;
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
+import me.thedivazo.libs.database.util.UrlDatabaseUtil;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -19,12 +20,7 @@ public class SourceFactoryMySQL<T extends SQLDatabaseConfig & MonoDatabaseConfig
         String url = config.getUrl();
         if (!config.explicitUrl()) {
             StringBuilder urlBuilder = new StringBuilder(String.format("jdbc:mysql://%s:%s/%s", config.getHost(), config.getPort(), config.getDatabaseName()));
-            String prevSign = "?";
-            if (!config.getParams().isEmpty()) urlBuilder.append("?");
-            for (Map.Entry<String, String> param : config.getParams().entrySet()) {
-                urlBuilder.append(String.format("%s%s=%s", prevSign, param.getKey(), param.getValue()));
-                prevSign = "&";
-            }
+            urlBuilder.append(UrlDatabaseUtil.generateUrlParams(config.getParams()));
 
             url = urlBuilder.toString();
         }
