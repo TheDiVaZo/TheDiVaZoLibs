@@ -14,14 +14,52 @@ import java.util.stream.Stream;
  * @param <ID> Объект идентификатора
  **/
 public interface Dao<T, ID> {
+
+    /**
+     * Вставить запись в таблицу
+     * @param entity объект записи для вставки.
+     * @return Возвращает ID вставленной записи
+     */
     ID insert(T entity);
+
+    /**
+     * Тоже что и {@link Dao#insert(T)}, но для нескольких записей
+     * @param entities объекты записи
+     * @return идентификаторы новых записей в базе.
+     */
     Iterable<ID> inserts(Iterable<? extends T> entities);
 
+    /**
+     * Комбинация методов {@link Dao#insert(T)} и {@link Dao#update(T)}
+     * @param entity объект записи для вставки или обновления
+     * @return идентификатор новой/обновленной записи
+     */
     ID upsert(T entity);
+    /**
+     * Тоже что и {@link Dao#upsert(T)}, но для нескольких записей
+     * @param entities объекты записей
+     * @return идентификаторы новых/обновленных записей в базе.
+     */
     Iterable<ID> upserts(Iterable<? extends T> entities);
 
+    /**
+     * Удаляет запись из базы данных
+     * @param key объект идентификатора записи
+     * @return true - запись удалена. false - запись не удалена.
+     */
     boolean delete(ID key);
-    int deletes(Iterable<? extends ID> keys);
+
+    /**
+     * Удаляет записи из базы
+     * @param ids объекты идентификаторов записей
+     * @return кол-во записей, которое было удалено.
+     */
+    int deletes(Iterable<? extends ID> ids);
+
+    /**
+     * Удаляет все записи из базы
+     * @return кол-во записей, которое было удалено
+     */
     int deletesAll();
 
     boolean update(T entity);

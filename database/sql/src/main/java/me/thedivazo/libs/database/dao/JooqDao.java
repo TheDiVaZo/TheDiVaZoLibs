@@ -126,10 +126,10 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
     }
 
     @Override
-    public int deletes(Iterable<? extends ID> keys) {
+    public int deletes(Iterable<? extends ID> ids) {
         try (Connection connection = pool.getConnection()) {
             DSLContext dslContext = getDslContext(connection);
-            return dslContext.deleteFrom(tableName).where(keyIdentifier.in(IterableUtil.toArray(keys, idClass))).execute();
+            return dslContext.deleteFrom(tableName).where(keyIdentifier.in(IterableUtil.toArray(ids, idClass))).execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
