@@ -1,7 +1,7 @@
 package me.thedivazo.libs.database.repo;
 
 import lombok.RequiredArgsConstructor;
-import me.thedivazo.libs.database.repo.entity.EntityIdentifier;
+import me.thedivazo.libs.database.repo.entity.Identifier;
 import me.thedivazo.libs.database.repo.entity.NextIdGenerator;
 import me.thedivazo.libs.util.Cloner;
 import me.thedivazo.libs.util.IterableUtil;
@@ -28,7 +28,7 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
 
     private final Map<ID, T> localStorage = new ConcurrentHashMap<>();
     private final NextIdGenerator<ID> nextIdGenerator;
-    private final EntityIdentifier<T> entityIdentifier;
+    private final Identifier<T> identifier;
     private final Cloner<T> cloner;
 
 
@@ -82,24 +82,25 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
     }
 
     @Override
-    public <E extends T> E save(E entity) {
-        E clonedEntity = cloner.clone(entity);
+    public ID save(T entity) {
+        T clonedEntity = cloner.clone(entity);
         Optional<Map.Entry<ID, T>> idtEntry = localStorage.entrySet().stream()
-                .filter(entry -> entityIdentifier.isIdentical(entity, entry.getValue()))
+                .filter(entry -> identifier.isIdentical(entity, entry.getValue()))
                 .findAny();
         if (idtEntry.isPresent()) {
             idtEntry.get().setValue(clonedEntity);
+            return idtEntry.get().getKey();
         } else {
             ID id = nextIdGenerator.generateNextId();
             localStorage.put(id, clonedEntity);
+            return id;
         }
-        return cloner.clone(clonedEntity);
     }
 
     @Override
-    public <E extends T> Iterable<E> saveAll(Iterable<E> entities) {
+    public Iterable<ID> saveAll(Iterable<T> entities) {
         return IterableUtil.toStream(entities)
-               .map(entity->cloner.<E>clone(save(entity)))
+               .map(this::save)
                .toList();
     }
 }
