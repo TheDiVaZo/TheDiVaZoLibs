@@ -62,9 +62,25 @@ public interface Dao<T, ID> {
      */
     int deletesAll();
 
+    /**
+     * Обновить запись в базе
+     * @param entity объект записи
+     * @return true - запись была обновлена, false - запись не найдена или не была обновлена по другим причинам
+     */
     boolean update(T entity);
+
+    /**
+     * Тоже-самое что и {@link Dao#update(T)}, но для нескольких записей
+     * @param entities объекты записей
+     * @return кол-во записей, которое было обновлено.
+     */
     int updates(Iterable<? extends T> entities);
 
+    /**
+     * Получить запись
+     * @param id объект идентификатора записи
+     * @return возвращает запись, или null, если записи с таким идентификатором не существует
+     */
     @Nullable
     T get(ID id);
 
@@ -78,6 +94,11 @@ public interface Dao<T, ID> {
      */
     Stream<T> gets(Iterable<? extends ID> ids);
 
+    /**
+     * Возвращает идентификатор записи
+     * @param entity запись
+     * @return ее идентификатор
+     */
     ID getId(T entity);
 
     /**
