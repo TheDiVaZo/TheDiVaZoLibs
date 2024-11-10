@@ -7,7 +7,7 @@ import java.util.Objects;
  * created on 08.11.2024
  **/
 public interface CheckedPredicate<T, E extends Throwable> {
-    boolean test(T t) throws Exception;
+    boolean test(T t) throws E;
 
     default CheckedPredicate<T, E> and(CheckedPredicate<? super T, ? extends E> other) {
         Objects.requireNonNull(other);

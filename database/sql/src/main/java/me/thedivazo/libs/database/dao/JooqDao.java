@@ -2,7 +2,7 @@ package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
 import me.thedivazo.libs.util.IterableUtil;
-import me.thedivazo.libs.util.LazyUncheckedSpliterator;
+import me.thedivazo.libs.util.LazyCheckedSpliterator;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Record;
 import org.jooq.*;
@@ -86,7 +86,7 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
             final Connection connection = pool.getConnection();
             final DSLContext dslContext = getDslContext(connection);
             Cursor<?> cursor = dslContext.selectFrom(tableName).where(condition).fetchLazy();
-            return StreamSupport.stream(new LazyUncheckedSpliterator<T>(action -> {
+            return StreamSupport.stream(new LazyCheckedSpliterator<T, SQLException>(action -> {
                 if (!cursor.hasNext()) {
                     close(connection);
                     cursor.close();

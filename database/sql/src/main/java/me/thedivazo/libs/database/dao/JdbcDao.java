@@ -1,18 +1,15 @@
 package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
-import me.thedivazo.libs.util.LazyUncheckedSpliterator;
+import me.thedivazo.libs.util.LazyCheckedSpliterator;
 import me.thedivazo.libs.util.function.CheckedFunction;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -88,7 +85,7 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
             final Connection connection = pool.getConnection();
             final PreparedStatement ps = preparedStatementGetter.apply(connection);
             final ResultSet rs = ps.executeQuery();
-            return StreamSupport.stream(new LazyUncheckedSpliterator<T>(action -> {
+            return StreamSupport.stream(new LazyCheckedSpliterator<T, SQLException>(action -> {
                 if (!rs.next()) {
                     close(connection);
                     close(ps);
@@ -107,7 +104,7 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
                     throw new RuntimeException(e);
                 }
             });
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
