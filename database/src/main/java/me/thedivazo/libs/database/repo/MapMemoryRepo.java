@@ -10,9 +10,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
- * Репозиторий, использующий ConcurrentSkipListMap в качестве хранилища.
+ * Репозиторий, использующий ConcurrentHashMap в качестве хранилища.
  * При добавлении/изменении сущности, в базу сохраняется ее независимая клонированная версия
  * При получении сущности, вы так же получаете независимый от сущности в хранилище клон
  * Это нужно для безопасности и эмуляции базы данных
@@ -24,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <ID> Идентификатор сущности
  */
 @RequiredArgsConstructor
-public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
+public class MapMemoryRepo<T, ID> implements CrudRepository<T, ID> {
 
     private final Map<ID, T> localStorage = new ConcurrentHashMap<>();
     private final NextIdGenerator<ID> nextIdGenerator;
@@ -74,6 +75,11 @@ public class MapMemoryRepo<T, ID> implements Repository<T, ID> {
                 .filter(entry -> idCollection.contains(entry.getKey()))
                 .map(entry->cloner.<T>clone(entry.getValue()))
                 .toList();
+    }
+
+    @Override
+    public Iterable<T> findAllByPredicate(Predicate<T> predicate) {
+        return localStorage.values().stream().filter(predicate).toList();
     }
 
     @Override
