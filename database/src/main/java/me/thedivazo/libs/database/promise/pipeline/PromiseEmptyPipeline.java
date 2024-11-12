@@ -1,10 +1,10 @@
 package me.thedivazo.libs.database.promise.pipeline;
 
 
-import me.thedivazo.libs.util.execut.AsyncThreadPool;
 import me.thedivazo.libs.database.promise.EmptyPromise;
-import me.thedivazo.libs.util.execut.SyncExecutor;
 import me.thedivazo.libs.database.promise.callback.PromiseEmptyResultCallback;
+import me.thedivazo.libs.util.execut.AsyncThreadPool;
+import me.thedivazo.libs.util.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -21,7 +21,7 @@ public class PromiseEmptyPipeline<P extends PromiseEmptyResultCallback, E> exten
     }
 
     public CompletableFuture<Void> getResultFuture() {
-        return (CompletableFuture<Void>) databaseResultFuture;
+        return (CompletableFuture<Void>) resultFuture;
     }
 
 
@@ -52,7 +52,7 @@ public class PromiseEmptyPipeline<P extends PromiseEmptyResultCallback, E> exten
             P promiseCallback = promiseCallbackRef.get();
 
             try {
-                databaseResultFuture.get();
+                resultFuture.get();
                 if(promiseCallback.isAsync()) {
                     promiseCallback.getEmptyResultCallback().accept(null);
                 }

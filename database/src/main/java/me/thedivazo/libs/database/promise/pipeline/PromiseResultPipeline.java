@@ -1,10 +1,10 @@
 package me.thedivazo.libs.database.promise.pipeline;
 
 
-import me.thedivazo.libs.util.execut.AsyncThreadPool;
 import me.thedivazo.libs.database.promise.ResultPromise;
-import me.thedivazo.libs.util.execut.SyncExecutor;
 import me.thedivazo.libs.database.promise.callback.PromiseResultCallback;
+import me.thedivazo.libs.util.execut.AsyncThreadPool;
+import me.thedivazo.libs.util.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -24,7 +24,7 @@ public class PromiseResultPipeline<P extends PromiseResultCallback<E>, E> extend
 
     @Override
     public CompletableFuture<E> getResultFuture() {
-        return databaseResultFuture;
+        return resultFuture;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PromiseResultPipeline<P extends PromiseResultCallback<E>, E> extend
             P promiseCallback = promiseCallbackRef.get();
 
             try {
-                entityResult = databaseResultFuture.get();
+                entityResult = resultFuture.get();
                 if (promiseCallback.isAsync()) {
                     promiseCallback.getResultCallback().accept(entityResult, null);
                 } else { // SYNC
