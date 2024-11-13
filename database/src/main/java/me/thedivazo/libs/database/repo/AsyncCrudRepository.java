@@ -1,7 +1,6 @@
 package me.thedivazo.libs.database.repo;
 
 import me.thedivazo.libs.database.promise.EmptyPromise;
-import me.thedivazo.libs.database.promise.Promise;
 import me.thedivazo.libs.database.promise.ResultPromise;
 
 import java.util.Optional;

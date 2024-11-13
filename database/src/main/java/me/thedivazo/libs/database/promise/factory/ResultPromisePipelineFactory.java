@@ -1,9 +1,8 @@
 package me.thedivazo.libs.database.promise.factory;
 
-import me.thedivazo.libs.database.promise.Promise;
 import me.thedivazo.libs.database.promise.ResultPromise;
-import me.thedivazo.libs.database.promise.pipeline.PromiseResultPipeline;
-import me.thedivazo.libs.util.execut.AsyncThreadPool;
+import me.thedivazo.libs.database.promise.executor.AsyncExecutor;
+import me.thedivazo.libs.database.promise.pipeline.ResultPromisePipeline;
 import me.thedivazo.libs.util.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,19 +13,19 @@ import java.util.logging.Logger;
  * @author TheDiVaZo
  * created on 12.11.2024
  **/
-public class ResultPromisePipelineFactory extends PromisePipelineFactory<Object> implements ResultPromiseFactory {
-    public ResultPromisePipelineFactory(SyncExecutor syncExecutor, AsyncThreadPool asyncThreadPool, Logger dbLogger) {
-        super(syncExecutor, asyncThreadPool, dbLogger);
+public class ResultPromisePipelineFactory extends PromisePipelineFactory<Object> implements ResultPromiseFactory<Object> {
+    public ResultPromisePipelineFactory(SyncExecutor syncExecutor, AsyncExecutor asyncExecutor, Logger logger) {
+        super(syncExecutor, asyncExecutor, logger);
     }
 
     @Override
-    public <E> ResultPromise<E> ofPromise(Supplier<E> supplier) {
-        CompletableFuture<E> future = CompletableFuture.supplyAsync(supplier);
-        return (ResultPromise<E>) ofPromise(future);
+    public <T> ResultPromise<T> ofPromise(CompletableFuture<T> future) {
+        return new ResultPromisePipeline<>(future, asyncExecutor, syncExecutor, logger);
     }
 
     @Override
-    public <T> Promise<T> ofPromise(CompletableFuture<T> future) {
-        return new PromiseResultPipeline<>(future, syncExecutor, asyncThreadPool, dbLogger);
+    public <T> ResultPromise<T> ofPromise(Supplier<T> future) {
+        CompletableFuture<T> result = CompletableFuture.supplyAsync(future);
+        return ofPromise(result);
     }
 }

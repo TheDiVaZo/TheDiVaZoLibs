@@ -1,7 +1,6 @@
 package me.thedivazo.libs.database.repo;
 
 import me.thedivazo.libs.database.dao.Dao;
-import me.thedivazo.libs.database.promise.ResultPromise;
 
 import java.util.Optional;
 import java.util.function.Predicate;

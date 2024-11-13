@@ -1,20 +1,14 @@
 package me.thedivazo.libs.database.promise.callback;
 
-public abstract class PromiseCallback {
+import java.util.function.BiConsumer;
 
-    protected final boolean isAsync;
-    protected final boolean isProvidedExceptionHandler;
+/**
+ * @author TheDiVaZo
+ * created on 13.11.2024
+ */
+public interface PromiseCallback<E> {
+    boolean isAsync();
+    boolean isProvidedExceptionHandler();
 
-    public PromiseCallback(boolean isAsync, boolean isProvidedExceptionHandler) {
-        this.isAsync = isAsync;
-        this.isProvidedExceptionHandler = isProvidedExceptionHandler;
-    }
-
-    public boolean isAsync() {
-        return isAsync;
-    }
-
-    public boolean isProvidedExceptionHandler() {
-        return isProvidedExceptionHandler;
-    }
+    BiConsumer<E, Throwable> getCallback();
 }

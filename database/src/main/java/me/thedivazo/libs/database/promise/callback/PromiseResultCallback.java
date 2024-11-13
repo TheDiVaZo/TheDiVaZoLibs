@@ -3,7 +3,7 @@ package me.thedivazo.libs.database.promise.callback;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class PromiseResultCallback<E> extends PromiseCallback {
+public class PromiseResultCallback<E> extends AbstractPromiseCallback<E> {
 
     private final BiConsumer<E, Throwable> resultCallback;
 
@@ -17,7 +17,7 @@ public class PromiseResultCallback<E> extends PromiseCallback {
         this.resultCallback = callback;
     }
 
-    public BiConsumer<E, Throwable> getResultCallback() {
+    public BiConsumer<E, Throwable> getCallback() {
         return resultCallback;
     }
 }

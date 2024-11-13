@@ -1,6 +1,7 @@
 package me.thedivazo.libs.database.promise.factory;
 
 import me.thedivazo.libs.database.promise.Promise;
+import me.thedivazo.libs.database.promise.ResultPromise;
 
 import java.util.concurrent.CompletableFuture;
 
