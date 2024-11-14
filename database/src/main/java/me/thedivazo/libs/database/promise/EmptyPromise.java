@@ -3,7 +3,8 @@ package me.thedivazo.libs.database.promise;
 import java.util.function.Consumer;
 
 /**
- * Async pipeline in the case your database operation doesn't return a result
+ * @author TheDiVaZo
+ * created on 13.11.2024
  */
 public interface EmptyPromise extends ResultPromise<Void> {
 
