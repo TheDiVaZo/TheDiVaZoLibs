@@ -18,11 +18,9 @@ public class EmptyPromisePipelineFactory extends PromisePipelineFactory<Void, Em
         super(syncExecutor, asyncExecutor, dbLogger);
     }
 
-
-    @SuppressWarnings("unchecked")
     @Override
     public <T extends Void> EmptyPromise ofPromise(CompletableFuture<T> future) {
-        return new EmptyPromisePipeline<>((CompletableFuture<Void>) future, asyncExecutor, syncExecutor, logger);
+        return new EmptyPromisePipeline<>(future, asyncExecutor, syncExecutor, logger);
     }
 
     @Override
