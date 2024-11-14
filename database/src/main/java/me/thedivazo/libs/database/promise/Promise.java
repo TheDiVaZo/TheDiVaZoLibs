@@ -7,5 +7,5 @@ import java.util.concurrent.CompletableFuture;
  * created on 13.11.2024
  */
 public interface Promise<E> {
-    CompletableFuture<E> getResultFuture();
+    CompletableFuture<? extends E> getResultFuture();
 }

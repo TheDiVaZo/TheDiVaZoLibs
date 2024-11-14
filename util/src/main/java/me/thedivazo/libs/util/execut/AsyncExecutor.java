@@ -1,4 +1,6 @@
-package me.thedivazo.libs.database.promise.executor;
+package me.thedivazo.libs.util.execut;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author TheDiVaZo

@@ -1,7 +1,7 @@
 package me.thedivazo.libs.database.promise.factory;
 
 import me.thedivazo.libs.database.promise.ResultPromise;
-import me.thedivazo.libs.database.promise.executor.AsyncExecutor;
+import me.thedivazo.libs.util.execut.AsyncExecutor;
 import me.thedivazo.libs.database.promise.pipeline.ResultPromisePipeline;
 import me.thedivazo.libs.util.execut.SyncExecutor;
 
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * @author TheDiVaZo
  * created on 12.11.2024
  **/
-public class ResultPromisePipelineFactory extends PromisePipelineFactory<Object> implements ResultPromiseFactory<Object> {
+public class ResultPromisePipelineFactory extends PromisePipelineFactory<Object, ResultPromise<?>> implements ResultPromiseFactory {
     public ResultPromisePipelineFactory(SyncExecutor syncExecutor, AsyncExecutor asyncExecutor, Logger logger) {
         super(syncExecutor, asyncExecutor, logger);
     }
@@ -25,7 +25,6 @@ public class ResultPromisePipelineFactory extends PromisePipelineFactory<Object>
 
     @Override
     public <T> ResultPromise<T> ofPromise(Supplier<T> future) {
-        CompletableFuture<T> result = CompletableFuture.supplyAsync(future);
-        return ofPromise(result);
+        return ofPromise(CompletableFuture.supplyAsync(future));
     }
 }

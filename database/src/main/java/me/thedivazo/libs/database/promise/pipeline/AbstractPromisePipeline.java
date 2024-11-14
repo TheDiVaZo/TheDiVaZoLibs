@@ -1,9 +1,8 @@
 package me.thedivazo.libs.database.promise.pipeline;
 
 import me.thedivazo.libs.database.promise.Promise;
-import me.thedivazo.libs.database.promise.ResultPromise;
 import me.thedivazo.libs.database.promise.callback.PromiseCallback;
-import me.thedivazo.libs.database.promise.executor.AsyncExecutor;
+import me.thedivazo.libs.util.execut.AsyncExecutor;
 import me.thedivazo.libs.util.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractPromisePipeline<P extends PromiseCallback<E>, E> implements Promise<E> {
 
-    protected final CompletableFuture<E> future;
+    protected final CompletableFuture<? extends E> future;
     protected final AsyncExecutor asyncExecutor;
     protected final SyncExecutor syncExecutor;
     protected final Logger logger;
@@ -25,7 +24,7 @@ public abstract class AbstractPromisePipeline<P extends PromiseCallback<E>, E> i
 
     protected StackTraceElement stackTraceElementCaller;
 
-    public AbstractPromisePipeline(CompletableFuture<E> future, AsyncExecutor asyncExecutor, SyncExecutor syncExecutor, Logger logger) {
+    protected AbstractPromisePipeline(CompletableFuture<? extends E> future, AsyncExecutor asyncExecutor, SyncExecutor syncExecutor, Logger logger) {
         this.future = future;
         this.asyncExecutor = asyncExecutor;
         this.syncExecutor = syncExecutor;
@@ -44,40 +43,12 @@ public abstract class AbstractPromisePipeline<P extends PromiseCallback<E>, E> i
         handlePromise();
     }
 
-    protected void handlePromise() {
-        asyncExecutor.execute(() -> {
-            E result;
-            P promiseCallback = this.promiseCallbackRef.get();
+    protected abstract void handlePromise();
 
-            try {
-                result = future.get();
-                if(promiseCallback.isAsync()) {
-                    promiseCallback.getCallback().accept(result, null);
-                } else { // SYNC
-                    syncExecutor.runSync(() -> promiseCallback.getCallback().accept(result, null));
-                }
-            } catch (Throwable e) {
-                handleException(promiseCallback, e);
-            }
-        });
-    }
-
-    protected void handleException(P promiseCallback, Throwable e) {
-        if (!promiseCallback.isProvidedExceptionHandler()) {
-            logger.warning(String.format("%s%nAsync promise ended with an exception, error message: '%s'.", stackTraceElementCaller.toString(), e.getMessage()));
-            e.printStackTrace();
-            return;
-        }
-        if(promiseCallback.isAsync()) {
-            promiseCallback.getCallback().accept(null, e);
-        } else { // SYNC
-            syncExecutor.runSync(() -> promiseCallback.getCallback().accept(null, e));
-        }
-
-    }
+    protected abstract void handleException(P promiseCallback, Throwable throwable);
 
     @Override
-    public CompletableFuture<E> getResultFuture() {
+    public CompletableFuture<? extends E> getResultFuture() {
         return future;
     }
 }

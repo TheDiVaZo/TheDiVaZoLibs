@@ -2,9 +2,8 @@ package me.thedivazo.libs.database.promise.pipeline;
 
 import me.thedivazo.libs.database.promise.ResultPromise;
 import me.thedivazo.libs.database.promise.callback.PromiseCallback;
-import me.thedivazo.libs.database.promise.callback.PromiseEmptyResultCallback;
 import me.thedivazo.libs.database.promise.callback.PromiseResultCallback;
-import me.thedivazo.libs.database.promise.executor.AsyncExecutor;
+import me.thedivazo.libs.util.execut.AsyncExecutor;
 import me.thedivazo.libs.util.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,6 +18,40 @@ import java.util.logging.Logger;
 public class ResultPromisePipeline<P extends PromiseCallback<E>, E> extends AbstractPromisePipeline<P, E> implements ResultPromise<E> {
     public ResultPromisePipeline(CompletableFuture<E> future, AsyncExecutor asyncExecutor, SyncExecutor syncExecutor, Logger logger) {
         super(future, asyncExecutor, syncExecutor, logger);
+    }
+
+    @Override
+    protected void handlePromise() {
+        asyncExecutor.execute(() -> {
+            E result;
+            P promiseCallback = this.promiseCallbackRef.get();
+
+            try {
+                result = future.get();
+                if(promiseCallback.isAsync()) {
+                    promiseCallback.getCallback().accept(result, null);
+                } else { // SYNC
+                    syncExecutor.runSync(() -> promiseCallback.getCallback().accept(result, null));
+                }
+            } catch (Throwable e) {
+                handleException(promiseCallback, e);
+            }
+        });
+    }
+
+    @Override
+    protected void handleException(P promiseCallback, Throwable e) {
+        if (promiseCallback.isProvidedExceptionHandler()) {
+            logger.warning(String.format("%s%nAsync promise ended with an exception, error message: '%s'.", stackTraceElementCaller.toString(), e.getMessage()));
+            e.printStackTrace();
+            return;
+        }
+        if(promiseCallback.isAsync()) {
+            promiseCallback.getCallback().accept(null, e);
+        } else { // SYNC
+            syncExecutor.runSync(() -> promiseCallback.getCallback().accept(null, e));
+        }
+
     }
 
     @SuppressWarnings("unchecked")

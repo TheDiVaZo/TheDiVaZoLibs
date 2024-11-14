@@ -1,7 +1,6 @@
-package me.thedivazo.libs.database.promise.executor;
+package me.thedivazo.libs.util.execut;
 
 import lombok.AllArgsConstructor;
-import me.thedivazo.libs.util.execut.AsyncThreadPool;
 
 /**
  * @author TheDiVaZo
