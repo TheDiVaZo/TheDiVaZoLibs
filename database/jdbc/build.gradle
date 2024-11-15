@@ -7,7 +7,6 @@ dependencies {
 
     implementation 'com.zaxxer:HikariCP:3.4.5'
     implementation 'commons-dbutils:commons-dbutils:1.8.1'
-    implementation 'org.jooq:jooq:3.19.15'
 
     testImplementation project(":database")
     testImplementation project(":util")
