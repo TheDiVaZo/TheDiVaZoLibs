@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.thedivazo.libs.database'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly project(":database")
+    compileOnly project(":database:jdbc")
+}
+
+test {
+    useJUnitPlatform()
+}
