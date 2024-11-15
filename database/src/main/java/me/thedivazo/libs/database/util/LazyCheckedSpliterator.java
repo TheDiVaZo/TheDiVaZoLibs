@@ -1,4 +1,4 @@
-package me.thedivazo.libs.util;
+package me.thedivazo.libs.database.util;
 
 import me.thedivazo.libs.util.function.CheckedPredicate;
 

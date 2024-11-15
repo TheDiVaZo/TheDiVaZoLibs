@@ -2,7 +2,7 @@ package me.thedivazo.libs.database.sql.connection.factory;
 
 import me.thedivazo.libs.database.configsource.MultiDatabaseConfig;
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
-import me.thedivazo.libs.util.UrlDatabaseUtil;
+import me.thedivazo.libs.database.util.UrlDatabaseUtil;
 
 import java.util.Objects;
 

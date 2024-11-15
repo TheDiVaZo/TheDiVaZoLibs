@@ -1,8 +1,8 @@
 package me.thedivazo.libs.database.promise.factory;
 
 import me.thedivazo.libs.database.promise.Promise;
-import me.thedivazo.libs.util.execut.AsyncExecutor;
-import me.thedivazo.libs.util.execut.SyncExecutor;
+import me.thedivazo.libs.database.execut.AsyncExecutor;
+import me.thedivazo.libs.database.execut.SyncExecutor;
 
 import java.util.logging.Logger;
 

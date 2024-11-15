@@ -3,8 +3,8 @@ package me.thedivazo.libs.database.promise.pipeline;
 import me.thedivazo.libs.database.promise.EmptyPromise;
 import me.thedivazo.libs.database.promise.callback.PromiseEmptyCallback;
 import me.thedivazo.libs.database.promise.callback.PromiseEmptyResultCallback;
-import me.thedivazo.libs.util.execut.AsyncExecutor;
-import me.thedivazo.libs.util.execut.SyncExecutor;
+import me.thedivazo.libs.database.execut.AsyncExecutor;
+import me.thedivazo.libs.database.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;

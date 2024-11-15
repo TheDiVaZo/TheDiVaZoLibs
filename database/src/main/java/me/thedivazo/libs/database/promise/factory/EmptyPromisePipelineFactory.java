@@ -1,10 +1,9 @@
 package me.thedivazo.libs.database.promise.factory;
 
 import me.thedivazo.libs.database.promise.EmptyPromise;
-import me.thedivazo.libs.database.promise.ResultPromise;
-import me.thedivazo.libs.util.execut.AsyncExecutor;
+import me.thedivazo.libs.database.execut.AsyncExecutor;
 import me.thedivazo.libs.database.promise.pipeline.EmptyPromisePipeline;
-import me.thedivazo.libs.util.execut.SyncExecutor;
+import me.thedivazo.libs.database.execut.SyncExecutor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;

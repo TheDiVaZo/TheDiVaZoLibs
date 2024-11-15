@@ -1,4 +1,4 @@
-package me.thedivazo.libs.util.execut;
+package me.thedivazo.libs.database.execut;
 
 import java.util.concurrent.CompletableFuture;
 

@@ -1,7 +1,7 @@
 package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
-import me.thedivazo.libs.util.LazyCheckedSpliterator;
+import me.thedivazo.libs.database.util.LazyCheckedSpliterator;
 import me.thedivazo.libs.util.function.CheckedFunction;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
