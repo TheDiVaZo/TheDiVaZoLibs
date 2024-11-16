@@ -42,6 +42,12 @@ public class MySqlDaoTest extends AbstractDaoTest {
 
     @BeforeAll
     public static void initApp() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         mysqlContainer.start();
         String jdbcURL = String.format(
                 "jdbc:mysql://%s:%d/test",
