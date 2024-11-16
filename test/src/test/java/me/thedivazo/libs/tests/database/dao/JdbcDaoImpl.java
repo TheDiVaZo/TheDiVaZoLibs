@@ -17,7 +17,7 @@ import java.util.UUID;
 public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<PlayerEntity, UUID> {
     private static final ResultSetHandler<PlayerEntity> resultSetHandler = resultSet-> {
         try {
-            return new PlayerEntity(resultSet.getObject("uuid", UUID.class), resultSet.getString("name"));
+            return new PlayerEntity(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -30,7 +30,7 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<Play
     @Override
     public UUID insert(PlayerEntity entity) {
         try {
-            return runner.insert("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", resultSetHandler, entity.uuid(), entity.name()).uuid();
+            return runner.insert("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", resultSetHandler, entity.uuid().toString(), entity.name()).uuid();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -44,7 +44,7 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<Play
     @Override
     public UUID upsert(PlayerEntity entity) {
         try {
-            return runner.insert("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE "+ keyIdentifier + " = VALUE("+ keyIdentifier+"), name = VALUE(name)", resultSetHandler, entity.uuid(), entity.name()).uuid();
+            return runner.insert("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", resultSetHandler, entity.uuid().toString(), entity.name()).uuid();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +58,7 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<Play
     @Override
     public boolean update(PlayerEntity entity) {
         try {
-            return runner.update("UPDATE " + tableName + " SET name = ? WHERE "+keyIdentifier + " = ?", entity.name(), entity.uuid()) > 0;
+            return runner.update("UPDATE " + tableName + " SET name = ? WHERE " + keyIdentifier + " = ?", entity.name(), entity.uuid().toString()) > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

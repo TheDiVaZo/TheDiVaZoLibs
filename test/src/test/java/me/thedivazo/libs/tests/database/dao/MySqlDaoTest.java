@@ -11,11 +11,9 @@ import me.thedivazo.libs.tests.database.dao.entity.PlayerEntity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,7 +41,7 @@ public class MySqlDaoTest extends AbstractDaoTest {
     @BeforeAll
     public static void initApp() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -58,13 +56,15 @@ public class MySqlDaoTest extends AbstractDaoTest {
 
         DefaultJDBCSource dataSource = new DefaultJDBCSource();
         dataSource.setUrl(jdbcURL);
+        dataSource.setUsername("test");
+        dataSource.setPassword("test");
 
         ConnectionPool connectionPool = connectionPoolFactory.create(dataSource);
 
         Dao<PlayerEntity, UUID> mysqlDao = new JdbcDaoImpl(connectionPool);
 
         String createTableSQL = """
-                CREATE TABLE IF NOT EXISTS player_entity (
+                CREATE TABLE player_entity (
                     uuid VARCHAR(36) PRIMARY KEY,
                     name VARCHAR(255) NOT NULL
                 );
@@ -72,11 +72,10 @@ public class MySqlDaoTest extends AbstractDaoTest {
 
         try (Connection connection = connectionPool.getConnection()) {
              Statement statement = connection.createStatement();
-            // Выполнение запроса
+            statement.execute("DROP TABLE IF EXISTS player_entity");
             statement.execute(createTableSQL);
             System.out.println("Таблица player_entity успешно создана.");
         } catch (SQLException e) {
-            // Обработка ошибок
             System.err.println("Ошибка при создании таблицы: " + e.getMessage());
         }
 
