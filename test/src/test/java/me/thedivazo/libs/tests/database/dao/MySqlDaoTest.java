@@ -72,7 +72,7 @@ public class MySqlDaoTest extends AbstractDaoTest {
 
         try (Connection connection = connectionPool.getConnection()) {
              Statement statement = connection.createStatement();
-            statement.execute("DROP TABLE IF EXISTS player_entity");
+            statement.execute("DROP TABLE player_entity");
             statement.execute(createTableSQL);
             System.out.println("Таблица player_entity успешно создана.");
         } catch (SQLException e) {
