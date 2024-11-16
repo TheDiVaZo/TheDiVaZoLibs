@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'com.zaxxer:HikariCP:3.4.5'
+    testImplementation  'commons-dbutils:commons-dbutils:1.8.1'
+
+    testImplementation "org.testcontainers:testcontainers:1.20.3"
+    testImplementation 'org.testcontainers:mysql:1.20.3'
+
+    testImplementation "com.h2database:h2:2.3.232"
+
+    testImplementation "org.mockito:mockito-core:5.11.0"
+
+    testImplementation project(":database")
+    testImplementation project(":util")
+    testImplementation project(":database:jdbc")
+    testImplementation project(":database:jooq")
+    testImplementation project(":database:mysql")
+    testImplementation project(":database:h2")
+    testImplementation project(":database:postgresql")
+    testImplementation project(":database:sqlite")
+}
+
+test {
+    useJUnitPlatform()
+}
