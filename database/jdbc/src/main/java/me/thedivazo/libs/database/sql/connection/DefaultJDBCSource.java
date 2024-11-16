@@ -46,8 +46,12 @@ public class DefaultJDBCSource implements DataSource {
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
         Properties properties = new Properties();
-        properties.setProperty("user", username);
-        properties.setProperty("password", password);
+        if (username != null || this.username != null) {
+            properties.setProperty("user", username == null ? this.username : username);
+        }
+        if (password != null || this.password != null) {
+            properties.setProperty("password", password == null ? this.password : password);
+        }
 
         DriverManager.setLoginTimeout(this.loginTimeout);
 
