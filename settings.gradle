@@ -13,4 +13,5 @@ include 'database:postgresql'
 findProject(':database:postgresql')?.name = 'postgresql'
 include 'database:jooq'
 findProject(':database:jooq')?.name = 'jooq'
+include 'test'
 

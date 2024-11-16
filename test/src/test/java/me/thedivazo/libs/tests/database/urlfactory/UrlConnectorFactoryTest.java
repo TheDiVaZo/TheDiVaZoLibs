@@ -1,5 +1,10 @@
-package me.thedivazo.libs.database.sql.connection.factory;
+package me.thedivazo.libs.tests.database.urlfactory;
 
+import me.thedivazo.libs.database.sql.connection.factory.H2JdbcUrlFactory;
+import me.thedivazo.libs.database.sql.connection.factory.MysqlJdbcUrlFactory;
+import me.thedivazo.libs.database.sql.connection.factory.PostgreSqlJdbcUrlFactory;
+import me.thedivazo.libs.database.sql.connection.factory.SQLiteJdbcUrlFactory;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -7,17 +12,22 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UrlConnectorFactoryTest {
-    private final TestSqlConfig configWithNoUrl = new TestSqlConfig(
-            "database",
-            null,
-            "username",
-            "password",
-            new String[]{"host1", "host2"},
-            new String[]{"port1", "port2"},
-            "host",
-            "port",
-            Map.of("anyoneParam", "anyoneValue")
-    );
+    private static TestSqlConfig configWithNoUrl;
+
+    @BeforeAll
+    static void initialize() {
+        configWithNoUrl = new TestSqlConfig(
+                "database",
+                null,
+                "username",
+                "password",
+                new String[]{"host1", "host2"},
+                new String[]{"port1", "port2"},
+                "host",
+                "port",
+                Map.of("anyoneParam", "anyoneValue")
+        );
+    }
 
     @Test
     void testMysqlUrlGenerated() {

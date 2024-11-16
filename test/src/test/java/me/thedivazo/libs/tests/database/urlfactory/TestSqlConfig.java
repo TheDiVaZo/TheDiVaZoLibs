@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql.connection.factory;
+package me.thedivazo.libs.tests.database.urlfactory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
