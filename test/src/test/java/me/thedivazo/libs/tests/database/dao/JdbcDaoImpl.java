@@ -17,20 +17,24 @@ import java.util.UUID;
 public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<PlayerEntity, UUID> {
     private static final ResultSetHandler<PlayerEntity> resultSetHandler = resultSet-> {
         try {
-            return new PlayerEntity(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"));
+            if (resultSet.next()) {
+                return new PlayerEntity(UUID.fromString(resultSet.getString("id")), resultSet.getString("name"));
+            }
+            else return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     };
 
     protected JdbcDaoImpl(ConnectionPool pool) {
-        super("player_entity", "uuid", pool, resultSetHandler);
+        super("player_entity", "id", pool, resultSetHandler);
     }
 
     @Override
     public UUID insert(PlayerEntity entity) {
         try {
-            return runner.insert("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", resultSetHandler, entity.uuid().toString(), entity.name()).uuid();
+            runner.execute("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", entity.uuid().toString(), entity.name());
+            return entity.uuid();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -44,7 +48,8 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<Play
     @Override
     public UUID upsert(PlayerEntity entity) {
         try {
-            return runner.insert("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", resultSetHandler, entity.uuid().toString(), entity.name()).uuid();
+            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", entity.uuid().toString(), entity.name());
+            return entity.uuid();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

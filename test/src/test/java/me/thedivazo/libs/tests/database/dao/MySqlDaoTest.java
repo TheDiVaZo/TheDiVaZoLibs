@@ -65,14 +65,13 @@ public class MySqlDaoTest extends AbstractDaoTest {
 
         String createTableSQL = """
                 CREATE TABLE player_entity (
-                    uuid VARCHAR(36) PRIMARY KEY,
+                    id VARCHAR(36) PRIMARY KEY,
                     name VARCHAR(255) NOT NULL
                 );
                 """;
 
         try (Connection connection = connectionPool.getConnection()) {
              Statement statement = connection.createStatement();
-            statement.execute("DROP TABLE player_entity");
             statement.execute(createTableSQL);
             System.out.println("Таблица player_entity успешно создана.");
         } catch (SQLException e) {
