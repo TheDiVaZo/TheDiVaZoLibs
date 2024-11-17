@@ -1,4 +1,4 @@
-package me.thedivazo.libs.database.sql.connection.factory;
+package me.thedivazo.libs.database.sql.connection;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
 

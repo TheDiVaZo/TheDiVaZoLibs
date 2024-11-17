@@ -3,7 +3,7 @@ package me.thedivazo.libs.tests.database.dao;
 import me.thedivazo.libs.database.dao.Dao;
 import me.thedivazo.libs.database.dao.JdbcDao;
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
-import me.thedivazo.libs.tests.database.dao.entity.PlayerEntity;
+import me.thedivazo.libs.tests.database.dao.entity.BinaryIdPlayerEntity;
 import me.thedivazo.libs.util.IterableUtil;
 import org.apache.commons.dbutils.ResultSetHandler;
 
@@ -13,11 +13,11 @@ import java.sql.SQLException;
  * @author TheDiVaZo
  * created on 16.11.2024
  */
-public class JdbcDaoImpl extends JdbcDao<PlayerEntity, byte[]> implements Dao<PlayerEntity, byte[]> {
-    private static final ResultSetHandler<PlayerEntity> resultSetHandler = resultSet-> {
+public class MySqlJdbcDaoImpl extends JdbcDao<BinaryIdPlayerEntity, byte[]> {
+    private static final ResultSetHandler<BinaryIdPlayerEntity> resultSetHandler = resultSet-> {
         try {
             if (resultSet.next()) {
-                return new PlayerEntity(resultSet.getBytes("id"), resultSet.getString("name"));
+                return new BinaryIdPlayerEntity(resultSet.getBytes("id"), resultSet.getString("name"));
             }
             else return null;
         } catch (SQLException e) {
@@ -25,12 +25,12 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, byte[]> implements Dao<Pl
         }
     };
 
-    protected JdbcDaoImpl(ConnectionPool pool) {
+    protected MySqlJdbcDaoImpl(ConnectionPool pool) {
         super("player_entity", "id", pool, resultSetHandler);
     }
 
     @Override
-    public byte[] insert(PlayerEntity entity) {
+    public byte[] insert(BinaryIdPlayerEntity entity) {
         try {
             runner.execute("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", entity.uuidBytes(), entity.name());
             return entity.uuidBytes();
@@ -40,12 +40,12 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, byte[]> implements Dao<Pl
     }
 
     @Override
-    public Iterable<byte[]> inserts(Iterable<? extends PlayerEntity> entities) {
+    public Iterable<byte[]> inserts(Iterable<? extends BinaryIdPlayerEntity> entities) {
         return IterableUtil.toStream(entities).map(this::insert).toList();
     }
 
     @Override
-    public byte[] upsert(PlayerEntity entity) {
+    public byte[] upsert(BinaryIdPlayerEntity entity) {
         try {
             runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", entity.uuidBytes(), entity.name());
             return entity.uuidBytes();
@@ -55,12 +55,12 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, byte[]> implements Dao<Pl
     }
 
     @Override
-    public Iterable<byte[]> upserts(Iterable<? extends PlayerEntity> entities) {
+    public Iterable<byte[]> upserts(Iterable<? extends BinaryIdPlayerEntity> entities) {
         return IterableUtil.toStream(entities).map(this::upsert).toList();
     }
 
     @Override
-    public boolean update(PlayerEntity entity) {
+    public boolean update(BinaryIdPlayerEntity entity) {
         try {
             return runner.update("UPDATE " + tableName + " SET name = ? WHERE " + keyIdentifier + " = ?", entity.name(), entity.uuidBytes()) > 0;
         } catch (SQLException e) {
@@ -69,12 +69,12 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, byte[]> implements Dao<Pl
     }
 
     @Override
-    public int updates(Iterable<? extends PlayerEntity> entities) {
+    public int updates(Iterable<? extends BinaryIdPlayerEntity> entities) {
         return IterableUtil.toStream(entities).mapToInt(entity-> update(entity) ? 1 : 0).sum();
     }
 
     @Override
-    public byte[] getId(PlayerEntity entity) {
+    public byte[] getId(BinaryIdPlayerEntity entity) {
         return entity.uuidBytes();
     }
 }

@@ -1,14 +1,18 @@
 package me.thedivazo.libs.database.sql.connection.factory;
 
+import lombok.NoArgsConstructor;
 import me.thedivazo.libs.database.configsource.MonoDatabaseConfig;
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
+import me.thedivazo.libs.database.sql.connection.DataSourceFactory;
+import me.thedivazo.libs.database.sql.connection.JdbcSource;
 import me.thedivazo.libs.database.util.UrlDatabaseUtil;
 
 /**
  * @author TheDiVaZo
- * created on 07.11.2024
+ * created on 18.11.2024
  */
-public class MysqlJdbcUrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements JdbcUrlFactory<T> {
+@NoArgsConstructor
+public class MysqlDataSourceFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T> {
 
     protected boolean validConfig(T config) {
         if (config.explicitUrl()) return true;
@@ -17,7 +21,6 @@ public class MysqlJdbcUrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfi
                 config.getDatabaseName() != null;
     }
 
-    @Override
     public String createUrlConnection(T config) {
         if (!validConfig(config)) {
             throw new IllegalArgumentException("Invalid MySQL configuration");
@@ -29,8 +32,11 @@ public class MysqlJdbcUrlFactory<T extends SQLDatabaseConfig & MonoDatabaseConfi
         return url;
     }
 
+
     @Override
-    public String getDriverClassName() {
-        return "com.mysql.cj.jdbc.Driver";
+    public JdbcSource createDaoSource(T config) {
+        MysqlDataSource jdbcSource = new MysqlDataSource();
+        jdbcSource.setUrl(createUrlConnection(config));
+        return jdbcSource;
     }
 }

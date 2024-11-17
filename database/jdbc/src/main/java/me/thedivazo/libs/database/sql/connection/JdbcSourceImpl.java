@@ -3,7 +3,6 @@ package me.thedivazo.libs.database.sql.connection;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,24 +17,17 @@ import java.util.logging.Logger;
  */
 @Getter
 @Setter
-public class DefaultJDBCSource implements DataSource {
-    protected PrintWriter logWriter;
+public abstract class JdbcSourceImpl implements JdbcSource {
+    private PrintWriter logWriter;
     protected int loginTimeout;
     private String username;
     private String password;
-
     private String url;
 
-    public DefaultJDBCSource(String driverClassName) {
-        try {
-            Class.forName(driverClassName);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Driver has not been loaded",e);
+    protected void writeLog(String message) {
+        if (logWriter != null) {
+            logWriter.println(message);
         }
-    }
-
-    public DefaultJDBCSource() {
-
     }
 
     @Override
@@ -76,5 +68,16 @@ public class DefaultJDBCSource implements DataSource {
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException();
+    }
+
+    @Override
+    public void installDriver() {
+        writeLog("Loading driver connector " + getDriverClassName());
+        try {
+            this.getClass().getClassLoader().loadClass(getDriverClassName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Failed to load driver class: " + getDriverClassName(), e);
+        }
+        writeLog("Driver connector " + getDriverClassName() + " has been loaded with success");
     }
 }

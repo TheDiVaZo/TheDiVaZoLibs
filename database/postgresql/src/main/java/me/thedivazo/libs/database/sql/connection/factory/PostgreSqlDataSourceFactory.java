@@ -1,7 +1,11 @@
 package me.thedivazo.libs.database.sql.connection.factory;
 
+import lombok.NoArgsConstructor;
+import me.thedivazo.libs.database.configsource.MonoDatabaseConfig;
 import me.thedivazo.libs.database.configsource.MultiDatabaseConfig;
 import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
+import me.thedivazo.libs.database.sql.connection.DataSourceFactory;
+import me.thedivazo.libs.database.sql.connection.JdbcSource;
 import me.thedivazo.libs.database.util.UrlDatabaseUtil;
 
 import java.util.Objects;
@@ -10,7 +14,8 @@ import java.util.Objects;
  * @author TheDiVaZo
  * created on 07.11.2024
  */
-public class PostgreSqlJdbcUrlFactory<T extends SQLDatabaseConfig & MultiDatabaseConfig> implements JdbcUrlFactory<T> {
+@NoArgsConstructor
+public class PostgreSqlDataSourceFactory<T extends SQLDatabaseConfig & MonoDatabaseConfig> implements DataSourceFactory<T> {
     protected static final String DEFAULT_PORT = "5432";
 
     protected boolean validConfig(T config) {
@@ -20,7 +25,6 @@ public class PostgreSqlJdbcUrlFactory<T extends SQLDatabaseConfig & MultiDatabas
                 config.getDatabaseName() != null;
     }
 
-    @Override
     public String createUrlConnection(T config) {
         if (!validConfig(config)) {
             throw new IllegalArgumentException("Invalid PostgreSQL configuration");
@@ -52,7 +56,9 @@ public class PostgreSqlJdbcUrlFactory<T extends SQLDatabaseConfig & MultiDatabas
     }
 
     @Override
-    public String getDriverClassName() {
-        return  "org.postgresql.Driver";
+    public JdbcSource createDaoSource(T config) {
+        PostgreSqlDataSource jdbcSource = new PostgreSqlDataSource();
+        jdbcSource.setUrl(createUrlConnection(config));
+        return jdbcSource;
     }
 }

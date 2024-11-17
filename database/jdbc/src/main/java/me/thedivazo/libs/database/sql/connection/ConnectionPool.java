@@ -7,7 +7,8 @@ import java.sql.Connection;
  * @author TheDiVaZo
  * created on 06.11.2024
  */
-public interface ConnectionPool extends AutoCloseable {
+public interface ConnectionPool {
     DataSource getPooledDataSource();
     Connection getConnection();
+    void closePool();
 }

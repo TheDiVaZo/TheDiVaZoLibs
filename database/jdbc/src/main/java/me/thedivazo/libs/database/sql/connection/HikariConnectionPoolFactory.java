@@ -1,11 +1,9 @@
-package me.thedivazo.libs.database.sql.connection.factory;
+package me.thedivazo.libs.database.sql.connection;
 
 import com.zaxxer.hikari.HikariConfig;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import me.thedivazo.libs.database.configsource.HikariConfigParam;
-import me.thedivazo.libs.database.sql.connection.ConnectionPool;
-import me.thedivazo.libs.database.sql.connection.HikariConnectionPool;
 
 import javax.sql.DataSource;
 

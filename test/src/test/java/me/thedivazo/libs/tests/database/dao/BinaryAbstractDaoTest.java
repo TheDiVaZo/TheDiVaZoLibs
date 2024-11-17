@@ -1,10 +1,8 @@
 package me.thedivazo.libs.tests.database.dao;
 
-import lombok.NoArgsConstructor;
 import me.thedivazo.libs.database.dao.Dao;
-import me.thedivazo.libs.tests.database.dao.entity.PlayerEntity;
+import me.thedivazo.libs.tests.database.dao.entity.BinaryIdPlayerEntity;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
@@ -18,9 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author TheDiVaZo
  * created on 16.11.2024
  */
-@NoArgsConstructor()
-public abstract class AbstractDaoTest {
-    protected static Dao<PlayerEntity, byte[]> dao;
+public abstract class BinaryAbstractDaoTest {
+    protected static Dao<BinaryIdPlayerEntity, byte[]> dao;
 
     @AfterEach
     public void cleanUp() {
@@ -43,28 +40,28 @@ public abstract class AbstractDaoTest {
 
     @Test
     public void insertAndGet() {
-        PlayerEntity insertablePlayer = new PlayerEntity(toBytes(UUID.fromString("00000000-0000-0000-0000-000000000000")), "Abobus");
+        BinaryIdPlayerEntity insertablePlayer = new BinaryIdPlayerEntity(toBytes(UUID.fromString("00000000-0000-0000-0000-000000000000")), "Abobus");
         dao.insert(insertablePlayer);
-        PlayerEntity retrievedPlayer = dao.get(insertablePlayer.uuidBytes());
+        BinaryIdPlayerEntity retrievedPlayer = dao.get(insertablePlayer.uuidBytes());
         assertEquals(insertablePlayer, retrievedPlayer);
     }
 
     @Test
     public void insertAndDelete() {
-        PlayerEntity insertablePlayer = PlayerEntity.generate();
+        BinaryIdPlayerEntity insertablePlayer = BinaryIdPlayerEntity.generate();
         dao.insert(insertablePlayer);
-        PlayerEntity retrievedPlayer = dao.get(insertablePlayer.uuidBytes());
+        BinaryIdPlayerEntity retrievedPlayer = dao.get(insertablePlayer.uuidBytes());
         assertEquals(insertablePlayer, retrievedPlayer);
         dao.delete(insertablePlayer.uuidBytes());
-        PlayerEntity removedPlayer = dao.get(insertablePlayer.uuidBytes());
+        BinaryIdPlayerEntity removedPlayer = dao.get(insertablePlayer.uuidBytes());
         assertNull(removedPlayer);
     }
 
     @Test
     public void insertDoubleKeyException() {
         UUID uuid = UUID.randomUUID();
-        PlayerEntity playerEntity = new PlayerEntity(toBytes(uuid), "SigmaMan");
-        PlayerEntity playerEntity2 = new PlayerEntity(toBytes(uuid), "SigmaMan");
+        BinaryIdPlayerEntity playerEntity = new BinaryIdPlayerEntity(toBytes(uuid), "SigmaMan");
+        BinaryIdPlayerEntity playerEntity2 = new BinaryIdPlayerEntity(toBytes(uuid), "SigmaMan");
         dao.insert(playerEntity);
         try {
             dao.insert(playerEntity2);
@@ -76,26 +73,26 @@ public abstract class AbstractDaoTest {
 
     @Test
     public void findOneByPredicate() {
-        PlayerEntity playerEntity = new PlayerEntity(toBytes(UUID.randomUUID()), "Valera");
-        PlayerEntity playerEntity2 = new PlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
+        BinaryIdPlayerEntity playerEntity = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "Valera");
+        BinaryIdPlayerEntity playerEntity2 = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
         dao.insert(playerEntity);
         dao.insert(playerEntity2);
-        Optional<PlayerEntity> foundPlayer = dao.getsAll().filter(entity->entity.name().equals("Valera")).findFirst();
+        Optional<BinaryIdPlayerEntity> foundPlayer = dao.getsAll().filter(entity->entity.name().equals("Valera")).findFirst();
         assertTrue(foundPlayer.isPresent());
         assertEquals(playerEntity, foundPlayer.get());
     }
 
     @Test
     public void findMoreByPredicate() {
-        PlayerEntity playerEntity = new PlayerEntity(toBytes(UUID.randomUUID()), "Valera");
-        PlayerEntity playerEntity2 = new PlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
-        PlayerEntity playerEntity3 = new PlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
-        PlayerEntity playerEntity4 = new PlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
+        BinaryIdPlayerEntity playerEntity = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "Valera");
+        BinaryIdPlayerEntity playerEntity2 = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
+        BinaryIdPlayerEntity playerEntity3 = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
+        BinaryIdPlayerEntity playerEntity4 = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "SigmaMan");
         dao.insert(playerEntity);
         dao.insert(playerEntity2);
         dao.insert(playerEntity3);
         dao.insert(playerEntity4);
-        List<PlayerEntity> foundPlayers = dao.getsAll().filter(entity->entity.name().equals("SigmaMan")).toList();
+        List<BinaryIdPlayerEntity> foundPlayers = dao.getsAll().filter(entity->entity.name().equals("SigmaMan")).toList();
         assertEquals(3, foundPlayers.size());
         assertTrue(foundPlayers.stream().allMatch(entity->entity.name().equals("SigmaMan")));
     }

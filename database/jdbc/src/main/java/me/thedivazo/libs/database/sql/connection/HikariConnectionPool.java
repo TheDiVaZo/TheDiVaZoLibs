@@ -32,7 +32,7 @@ public class HikariConnectionPool implements ConnectionPool {
     }
 
     @Override
-    public void close() {
+    public void closePool() {
         dataSource.close();
     }
 }
