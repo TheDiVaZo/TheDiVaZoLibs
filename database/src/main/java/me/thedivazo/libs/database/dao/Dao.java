@@ -1,17 +1,20 @@
 package me.thedivazo.libs.database.dao;
 
+import me.thedivazo.libs.database.repo.Repository;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
  * @author TheDiVaZo
  * created on 08.11.2024
  * <p>
- * Представляет собой интерфейс для прямого доступа и взаимодействия с базой данных
+ * Представляет собой интерфейс для прямого низкоуровнего доступа и взаимодействия с базой данных
+ *
  *
  * @param <T> Entity объект. Представляет собой отображение записи в базе
- * @param <ID> Объект идентификатора
+ * @param <ID> Объект идентификатора. Поддерживает классы, определенные спецификой JDBC. К примеру, если вам нужно хранить UUID в базе, то класс, представляющий ID должен быть либо {@code byte[16]}, либо {@link String}, или какой-либо угодный вам класс. Далее, уже в {@link Repository} вы преобразуете этот объект ID этого класса в объект {@link UUID} и возвращаете клиенту
  **/
 public interface Dao<T, ID> {
 

@@ -61,11 +61,11 @@ public class MySqlDaoTest extends AbstractDaoTest {
 
         ConnectionPool connectionPool = connectionPoolFactory.create(dataSource);
 
-        Dao<PlayerEntity, UUID> mysqlDao = new JdbcDaoImpl(connectionPool);
+        Dao<PlayerEntity, byte[]> mysqlDao = new JdbcDaoImpl(connectionPool);
 
         String createTableSQL = """
                 CREATE TABLE player_entity (
-                    id VARCHAR(36) PRIMARY KEY,
+                    id BINARY(16) PRIMARY KEY,
                     name VARCHAR(255) NOT NULL
                 );
                 """;

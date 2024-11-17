@@ -2,15 +2,13 @@ package me.thedivazo.libs.database.dao;
 
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
 import me.thedivazo.libs.database.util.LazyCheckedSpliterator;
+import me.thedivazo.libs.util.Mapper;
 import me.thedivazo.libs.util.function.CheckedFunction;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -48,7 +46,7 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     @Override
     public @Nullable T get(ID id) {
         try {
-            return runner.query("SELECT * FROM " + tableName + " WHERE " + keyIdentifier + " = ?", resultSetHandler, id.toString());
+            return runner.query("SELECT * FROM " + tableName + " WHERE " + keyIdentifier + " = ?", resultSetHandler, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,11 +56,11 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     public Stream<T> gets(Iterable<? extends ID> ids) {
         return getAllFromQuery(con->{
             StringBuilder query = new StringBuilder( "SELECT * FROM ").append(tableName).append(" WHERE ").append(keyIdentifier).append(" IN ");
-            List<String> preparedIds = new LinkedList<>();
+            List<ID> preparedIds = new LinkedList<>();
             query.append("(");
             boolean isFirst = true;
             for (ID id : ids) {
-                preparedIds.add(id.toString());
+                preparedIds.add(id);
                 if (!isFirst) {
                     query.append(", ");
                 }
@@ -82,6 +80,8 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     public Stream<T> getsAll() {
         return getAllFromQuery( con-> con.prepareStatement("SELECT * FROM " + tableName));
     }
+
+
 
     protected Stream<T> getAllFromQuery(CheckedFunction<Connection, PreparedStatement, SQLException> preparedStatementGetter) {
         try {
@@ -115,7 +115,7 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     @Override
     public boolean delete(ID id) {
         try {
-            int count = runner.update("DELETE FROM " + tableName + " WHERE " + keyIdentifier + "= ?", id.toString());
+            int count = runner.update("DELETE FROM " + tableName + " WHERE " + keyIdentifier + "= ?", id);
             return count > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -126,11 +126,11 @@ public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
     public int deletes(Iterable<? extends ID> ids) {
         try {
             StringBuilder query = new StringBuilder( "DELETE FROM ").append(tableName).append(" WHERE ").append(keyIdentifier).append(" IN ");
-            List<String> preparedIds = new LinkedList<>();
+            List<ID> preparedIds = new LinkedList<>();
             query.append("(");
             boolean isFirst = true;
             for (ID id : ids) {
-                preparedIds.add(id.toString());
+                preparedIds.add(id);
                 if (!isFirst) {
                     query.append(", ");
                 }

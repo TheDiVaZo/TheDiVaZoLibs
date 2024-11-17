@@ -8,17 +8,16 @@ import me.thedivazo.libs.util.IterableUtil;
 import org.apache.commons.dbutils.ResultSetHandler;
 
 import java.sql.SQLException;
-import java.util.UUID;
 
 /**
  * @author TheDiVaZo
  * created on 16.11.2024
  */
-public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<PlayerEntity, UUID> {
+public class JdbcDaoImpl extends JdbcDao<PlayerEntity, byte[]> implements Dao<PlayerEntity, byte[]> {
     private static final ResultSetHandler<PlayerEntity> resultSetHandler = resultSet-> {
         try {
             if (resultSet.next()) {
-                return new PlayerEntity(UUID.fromString(resultSet.getString("id")), resultSet.getString("name"));
+                return new PlayerEntity(resultSet.getBytes("id"), resultSet.getString("name"));
             }
             else return null;
         } catch (SQLException e) {
@@ -31,39 +30,39 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<Play
     }
 
     @Override
-    public UUID insert(PlayerEntity entity) {
+    public byte[] insert(PlayerEntity entity) {
         try {
-            runner.execute("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", entity.uuid().toString(), entity.name());
-            return entity.uuid();
+            runner.execute("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?)", entity.uuidBytes(), entity.name());
+            return entity.uuidBytes();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Iterable<UUID> inserts(Iterable<? extends PlayerEntity> entities) {
+    public Iterable<byte[]> inserts(Iterable<? extends PlayerEntity> entities) {
         return IterableUtil.toStream(entities).map(this::insert).toList();
     }
 
     @Override
-    public UUID upsert(PlayerEntity entity) {
+    public byte[] upsert(PlayerEntity entity) {
         try {
-            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", entity.uuid().toString(), entity.name());
-            return entity.uuid();
+            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", entity.uuidBytes(), entity.name());
+            return entity.uuidBytes();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Iterable<UUID> upserts(Iterable<? extends PlayerEntity> entities) {
+    public Iterable<byte[]> upserts(Iterable<? extends PlayerEntity> entities) {
         return IterableUtil.toStream(entities).map(this::upsert).toList();
     }
 
     @Override
     public boolean update(PlayerEntity entity) {
         try {
-            return runner.update("UPDATE " + tableName + " SET name = ? WHERE " + keyIdentifier + " = ?", entity.name(), entity.uuid().toString()) > 0;
+            return runner.update("UPDATE " + tableName + " SET name = ? WHERE " + keyIdentifier + " = ?", entity.name(), entity.uuidBytes()) > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -75,7 +74,7 @@ public class JdbcDaoImpl extends JdbcDao<PlayerEntity, UUID> implements Dao<Play
     }
 
     @Override
-    public UUID getId(PlayerEntity entity) {
-        return entity.uuid();
+    public byte[] getId(PlayerEntity entity) {
+        return entity.uuidBytes();
     }
 }
