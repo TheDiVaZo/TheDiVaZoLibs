@@ -1,4 +1,4 @@
-package me.thedivazo.libs.tests.database.dao;
+package me.thedivazo.libs.tests.database.dao.impl;
 
 import me.thedivazo.libs.database.dao.Dao;
 import me.thedivazo.libs.database.dao.JdbcDao;
@@ -25,7 +25,7 @@ public class MySqlJdbcDaoImpl extends JdbcDao<BinaryIdPlayerEntity, byte[]> {
         }
     };
 
-    protected MySqlJdbcDaoImpl(ConnectionPool pool) {
+    public MySqlJdbcDaoImpl(ConnectionPool pool) {
         super("player_entity", "id", pool, resultSetHandler);
     }
 
@@ -47,7 +47,7 @@ public class MySqlJdbcDaoImpl extends JdbcDao<BinaryIdPlayerEntity, byte[]> {
     @Override
     public byte[] upsert(BinaryIdPlayerEntity entity) {
         try {
-            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUBLICATE KEY UPDATE " + keyIdentifier + " = VALUE(" + keyIdentifier + "), name = VALUE(name)", entity.uuidBytes(), entity.name());
+            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)", entity.uuidBytes(), entity.name());
             return entity.uuidBytes();
         } catch (SQLException e) {
             throw new RuntimeException(e);

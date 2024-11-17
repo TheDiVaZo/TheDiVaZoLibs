@@ -1,6 +1,7 @@
 package me.thedivazo.libs.tests.database.dao;
 
 import me.thedivazo.libs.database.dao.Dao;
+import me.thedivazo.libs.tests.database.dao.entity.BinaryIdPlayerEntity;
 import me.thedivazo.libs.tests.database.dao.entity.UuidPlayerEntity;
 import me.thedivazo.libs.tests.database.dao.entity.UuidPlayerEntity;
 import org.junit.jupiter.api.AfterEach;
@@ -82,5 +83,17 @@ public abstract class UuidAbstractDaoTest {
         List<UuidPlayerEntity> foundPlayers = dao.getsAll().filter(entity->entity.name().equals("SigmaMan")).toList();
         assertEquals(3, foundPlayers.size());
         assertTrue(foundPlayers.stream().allMatch(entity->entity.name().equals("SigmaMan")));
+    }
+
+    @Test
+    public void upsertAndGet() {
+        UuidPlayerEntity playerEntity = new UuidPlayerEntity(UUID.randomUUID(), "Valera");
+        dao.upsert(playerEntity);
+        UuidPlayerEntity retrievedPlayer = dao.get(playerEntity.uuid());
+        assertEquals(playerEntity, retrievedPlayer);
+        UuidPlayerEntity newPlayerEntity = new UuidPlayerEntity(playerEntity.uuid(), "Mama");
+        dao.upsert(newPlayerEntity);
+        retrievedPlayer = dao.get(playerEntity.uuid());
+        assertEquals(newPlayerEntity, retrievedPlayer);
     }
 }

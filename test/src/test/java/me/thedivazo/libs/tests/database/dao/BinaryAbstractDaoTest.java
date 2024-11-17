@@ -96,4 +96,16 @@ public abstract class BinaryAbstractDaoTest {
         assertEquals(3, foundPlayers.size());
         assertTrue(foundPlayers.stream().allMatch(entity->entity.name().equals("SigmaMan")));
     }
+
+    @Test
+    public void upsertAndGet() {
+        BinaryIdPlayerEntity playerEntity = new BinaryIdPlayerEntity(toBytes(UUID.randomUUID()), "Valera");
+        dao.upsert(playerEntity);
+        BinaryIdPlayerEntity retrievedPlayer = dao.get(playerEntity.uuidBytes());
+        assertEquals(playerEntity, retrievedPlayer);
+        BinaryIdPlayerEntity newPlayerEntity = new BinaryIdPlayerEntity(playerEntity.uuidBytes(), "Mama");
+        dao.upsert(newPlayerEntity);
+        retrievedPlayer = dao.get(playerEntity.uuidBytes());
+        assertEquals(newPlayerEntity, retrievedPlayer);
+    }
 }

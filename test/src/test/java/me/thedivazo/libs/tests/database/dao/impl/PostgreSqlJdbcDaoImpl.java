@@ -1,4 +1,4 @@
-package me.thedivazo.libs.tests.database.dao;
+package me.thedivazo.libs.tests.database.dao.impl;
 
 import me.thedivazo.libs.database.dao.JdbcDao;
 import me.thedivazo.libs.database.sql.connection.ConnectionPool;
@@ -26,7 +26,7 @@ public class PostgreSqlJdbcDaoImpl extends JdbcDao<UuidPlayerEntity, UUID> {
         }
     };
 
-    protected PostgreSqlJdbcDaoImpl(ConnectionPool pool) {
+    public PostgreSqlJdbcDaoImpl(ConnectionPool pool) {
         super("player_entity", "id", pool, resultSetHandler);
     }
 
@@ -48,7 +48,7 @@ public class PostgreSqlJdbcDaoImpl extends JdbcDao<UuidPlayerEntity, UUID> {
     @Override
     public UUID upsert(UuidPlayerEntity entity) {
         try {
-            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON CONFLICT (name) DO UPDATE SET name = excluded.name", entity.uuid(), entity.name());
+            runner.update("INSERT INTO " + tableName + " (" + keyIdentifier + "," + "name" + ") VALUES(?, ?) ON CONFLICT ("+keyIdentifier+") DO UPDATE SET name = EXCLUDED.name", entity.uuid(), entity.name());
             return entity.uuid();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -7,6 +7,7 @@ import me.thedivazo.libs.database.sql.connection.ConnectionPoolFactory;
 import me.thedivazo.libs.database.sql.connection.HikariConnectionPoolFactory;
 import me.thedivazo.libs.database.sql.connection.factory.PostgreSqlDataSource;
 import me.thedivazo.libs.tests.database.dao.entity.UuidPlayerEntity;
+import me.thedivazo.libs.tests.database.dao.impl.PostgreSqlJdbcDaoImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.GenericContainer;
