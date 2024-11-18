@@ -2,6 +2,9 @@ plugins {
     id "io.freefair.lombok" version "${gradleLombokPlugin}" apply false
 }
 
+group = 'me.thedivazo.libs'
+version = '1.0-SNAPSHOT'
+
 allprojects {
     repositories {
         mavenCentral()
@@ -35,9 +38,5 @@ subprojects {
 
     compileJava {
         options.encoding = "UTF-8" // We want UTF-8 for everything
-    }
-
-    test {
-        useJUnitPlatform()
     }
 }
