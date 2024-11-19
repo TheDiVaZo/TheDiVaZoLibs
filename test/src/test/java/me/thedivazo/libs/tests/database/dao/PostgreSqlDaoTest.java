@@ -7,7 +7,7 @@ import me.thedivazo.libs.database.sql.connection.ConnectionPoolFactory;
 import me.thedivazo.libs.database.sql.connection.HikariConnectionPoolFactory;
 import me.thedivazo.libs.database.sql.connection.factory.PostgreSqlDataSource;
 import me.thedivazo.libs.tests.database.dao.entity.UuidPlayerEntity;
-import me.thedivazo.libs.tests.database.dao.impl.PostgreSqlJdbcDaoImpl;
+import me.thedivazo.libs.tests.database.dao.impl.PostgresJooqDaoImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.GenericContainer;
@@ -55,7 +55,7 @@ public class PostgreSqlDaoTest extends UuidAbstractDaoTest {
 
         ConnectionPool connectionPool = connectionPoolFactory.create(dataSource);
 
-        Dao<UuidPlayerEntity, UUID> mysqlDao = new PostgreSqlJdbcDaoImpl(connectionPool);
+        Dao<UuidPlayerEntity, UUID> mysqlDao = new PostgresJooqDaoImpl(connectionPool);
 
         String createTableSQL = """
                 CREATE TABLE player_entity (

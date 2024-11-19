@@ -8,7 +8,7 @@ import me.thedivazo.libs.database.sql.connection.ConnectionPoolFactory;
 import me.thedivazo.libs.database.sql.connection.HikariConnectionPoolFactory;
 import me.thedivazo.libs.database.sql.connection.factory.MysqlDataSource;
 import me.thedivazo.libs.tests.database.dao.entity.BinaryIdPlayerEntity;
-import me.thedivazo.libs.tests.database.dao.impl.MySqlJdbcDaoImpl;
+import me.thedivazo.libs.tests.database.dao.impl.MySqlJooqDaoImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.GenericContainer;
@@ -57,7 +57,7 @@ public class MySqlDaoTest extends BinaryAbstractDaoTest {
 
         ConnectionPool connectionPool = connectionPoolFactory.create(dataSource);
 
-        Dao<BinaryIdPlayerEntity, byte[]> mysqlDao = new MySqlJdbcDaoImpl(connectionPool);
+        Dao<BinaryIdPlayerEntity, byte[]> mysqlDao = new MySqlJooqDaoImpl(connectionPool);
 
         String createTableSQL = """
                 CREATE TABLE player_entity (

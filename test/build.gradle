@@ -24,6 +24,8 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
+    testImplementation 'org.jooq:jooq:3.19.15'
+
     testImplementation project(":database")
     testImplementation project(":util")
     testImplementation project(":database:jdbc")

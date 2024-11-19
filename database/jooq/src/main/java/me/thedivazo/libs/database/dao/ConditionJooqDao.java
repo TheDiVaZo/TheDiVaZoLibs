@@ -10,8 +10,6 @@ import java.util.stream.Stream;
  * created on 08.11.2024
  **/
 public interface ConditionJooqDao<T, ID> extends Dao<T, ID> {
-    int updatesBy(T entity, Condition condition);
-
     int deletesBy(Condition condition);
 
     Stream<T> getsBy(Condition condition);
