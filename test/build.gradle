@@ -28,12 +28,10 @@ dependencies {
 
     testImplementation project(":database")
     testImplementation project(":util")
-    testImplementation project(":database:jdbc")
-    testImplementation project(":database:jooq")
-    testImplementation project(":database:mysql")
-    testImplementation project(":database:h2")
-    testImplementation project(":database:postgresql")
-    testImplementation project(":database:sqlite")
+    testImplementation project(":database:database-jdbc")
+    testImplementation project(":database:database-jooq")
+    testImplementation project(":database:database-mysql")
+    testImplementation project(":database:database-postgresql")
 }
 
 test {
