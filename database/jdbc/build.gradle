@@ -2,9 +2,9 @@ group = 'me.thedivazo.libs.database.sql'
 version = '1.0-SNAPSHOT'
 
 dependencies {
-    compileOnly project(":database")
-    compileOnly project(":util")
+    api project(":database")
+    api project(":util")
 
-    implementation 'com.zaxxer:HikariCP:3.4.5'
-    implementation 'commons-dbutils:commons-dbutils:1.8.1'
+    api 'com.zaxxer:HikariCP:3.4.5'
+    api 'commons-dbutils:commons-dbutils:1.8.1'
 }

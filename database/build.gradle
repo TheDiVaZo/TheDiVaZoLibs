@@ -1,6 +1,6 @@
-group = 'me.thedivazo.libs.database'
+group = 'me.thedivazo.libs'
 version = '1.0-SNAPSHOT'
 
 dependencies {
-    compileOnly project(":util")
+    api project(":util")
 }

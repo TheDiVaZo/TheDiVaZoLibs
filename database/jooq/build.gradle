@@ -1,22 +1,10 @@
-plugins {
-    id 'java'
-}
-
-group = 'me.thedivazo.libs.database'
-version = 'unspecified'
-
-repositories {
-    mavenCentral()
-}
+group = 'me.thedivazo.libs'
+version = '1.0-SNAPSHOT'
 
 dependencies {
-    implementation 'org.jooq:jooq:3.19.15'
+    api 'org.jooq:jooq:3.19.15'
 
-    compileOnly project(":util")
-    compileOnly project(":database")
-    compileOnly project(":database:jdbc")
-}
-
-test {
-    useJUnitPlatform()
+    api project(":util")
+    api project(":database")
+    api project(":database:jdbc")
 }
