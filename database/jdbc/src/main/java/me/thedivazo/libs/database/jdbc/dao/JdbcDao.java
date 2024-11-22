@@ -1,5 +1,6 @@
-package me.thedivazo.libs.database.dao;
+package me.thedivazo.libs.database.jdbc.dao;
 
+import me.thedivazo.libs.database.dao.Dao;
 import me.thedivazo.libs.database.util.LazyCheckedSpliterator;
 import me.thedivazo.libs.util.Mapper;
 import me.thedivazo.libs.util.function.CheckedFunction;

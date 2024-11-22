@@ -1,6 +1,5 @@
 package me.thedivazo.libs.database.jdbc.dao;
 
-import me.thedivazo.libs.database.jdbc.connection.ConnectionPool;
 import me.thedivazo.libs.database.util.LazyCheckedSpliterator;
 import me.thedivazo.libs.util.IterableUtil;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +7,7 @@ import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.stream.Stream;
@@ -25,14 +25,14 @@ import java.util.stream.StreamSupport;
  * Dao классы для ваших сущностей.
  **/
 public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
-    protected final ConnectionPool pool;
+    protected final DataSource pool;
     protected final SQLDialect sqlDialect;
     protected final RecordMapper<? super Record, T> recordMapper;
     protected final Table<?> tableName;
     protected final Field<ID> keyIdentifier;
     protected final Class<ID> idClass;
 
-    protected JooqDao(Table<?> tableName, Field<ID> keyIdentifier, Class<ID> idClass, ConnectionPool pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
+    protected JooqDao(Table<?> tableName, Field<ID> keyIdentifier, Class<ID> idClass, DataSource pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
         this.pool = pool;
         this.sqlDialect = sqlDialect;
         this.recordMapper = recordMapper;
@@ -41,7 +41,7 @@ public abstract class JooqDao<T, ID> implements ConditionJooqDao<T, ID> {
         this.idClass = idClass;
     }
 
-    protected JooqDao(String tableName, String keyIdentifier, Class<ID> idClass, ConnectionPool pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
+    protected JooqDao(String tableName, String keyIdentifier, Class<ID> idClass, DataSource pool, SQLDialect sqlDialect, RecordMapper<? super Record, T> recordMapper) {
         this(DSL.table(DSL.name(tableName)), DSL.field(DSL.name(keyIdentifier), idClass), idClass, pool, sqlDialect, recordMapper);
     }
 
