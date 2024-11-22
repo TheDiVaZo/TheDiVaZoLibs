@@ -3,7 +3,7 @@ package me.thedivazo.libs.database.jdbc.connection;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
-import me.thedivazo.libs.database.configsource.HikariConfigParam;
+import me.thedivazo.libs.database.jdbc.configsource.HikariConfigParam;
 
 import javax.sql.DataSource;
 

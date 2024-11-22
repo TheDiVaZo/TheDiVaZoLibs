@@ -3,4 +3,6 @@ version = '1.0-SNAPSHOT'
 
 dependencies {
     api project(":database")
+
+    api project(":database:database-jdbc")
 }

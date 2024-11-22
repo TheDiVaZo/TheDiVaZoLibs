@@ -1,6 +1,6 @@
 package me.thedivazo.libs.database.jdbc.connection;
 
-import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
+import me.thedivazo.libs.database.jdbc.configsource.SQLDatabaseConfig;
 
 /**
  * @author TheDiVaZo
