@@ -1,11 +1,11 @@
 package me.thedivazo.libs.tests.database.dao;
 
-import me.thedivazo.libs.database.configsource.HikariConfigParamImpl;
+import me.thedivazo.libs.database.jdbc.configsource.HikariConfigParamImpl;
 import me.thedivazo.libs.database.dao.Dao;
-import me.thedivazo.libs.database.sql.connection.ConnectionPool;
-import me.thedivazo.libs.database.sql.connection.ConnectionPoolFactory;
-import me.thedivazo.libs.database.sql.connection.HikariConnectionPoolFactory;
-import me.thedivazo.libs.database.sql.connection.factory.PostgreSqlDataSource;
+import me.thedivazo.libs.database.jdbc.connection.ConnectionPool;
+import me.thedivazo.libs.database.jdbc.connection.ConnectionPoolFactory;
+import me.thedivazo.libs.database.jdbc.connection.HikariConnectionPoolFactory;
+import me.thedivazo.libs.database.jdbc.sql.connection.factory.PostgreSqlDataSource;
 import me.thedivazo.libs.tests.database.dao.entity.UuidPlayerEntity;
 import me.thedivazo.libs.tests.database.dao.impl.PostgresJooqDaoImpl;
 import org.junit.jupiter.api.AfterAll;

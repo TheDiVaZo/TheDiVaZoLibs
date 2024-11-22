@@ -32,6 +32,7 @@ dependencies {
     testImplementation project(":database:database-jooq")
     testImplementation project(":database:database-mysql")
     testImplementation project(":database:database-postgresql")
+    testImplementation project(":database:database-connect")
 }
 
 test {

@@ -1,8 +1,8 @@
 package me.thedivazo.libs.tests.database.dao.impl;
 
-import me.thedivazo.libs.database.dao.ConditionJooqDao;
-import me.thedivazo.libs.database.dao.JooqDao;
-import me.thedivazo.libs.database.sql.connection.ConnectionPool;
+import me.thedivazo.libs.database.jdbc.dao.ConditionJooqDao;
+import me.thedivazo.libs.database.jdbc.dao.JooqDao;
+import me.thedivazo.libs.database.jdbc.connection.ConnectionPool;
 import me.thedivazo.libs.tests.database.dao.entity.UuidPlayerEntity;
 import me.thedivazo.libs.util.IterableUtil;
 import org.jooq.DSLContext;

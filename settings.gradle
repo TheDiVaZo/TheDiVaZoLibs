@@ -10,4 +10,6 @@ findProject(':database:postgresql')?.name = 'database-postgresql'
 include 'database:jooq'
 findProject(':database:jooq')?.name = 'database-jooq'
 include 'test'
+include 'database:connect'
+findProject(':database:connect')?.name = 'database-connect'
 

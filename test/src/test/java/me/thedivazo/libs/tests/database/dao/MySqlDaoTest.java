@@ -1,12 +1,12 @@
 package me.thedivazo.libs.tests.database.dao;
 
 import lombok.NoArgsConstructor;
-import me.thedivazo.libs.database.configsource.HikariConfigParamImpl;
+import me.thedivazo.libs.database.jdbc.configsource.HikariConfigParamImpl;
 import me.thedivazo.libs.database.dao.Dao;
-import me.thedivazo.libs.database.sql.connection.ConnectionPool;
-import me.thedivazo.libs.database.sql.connection.ConnectionPoolFactory;
-import me.thedivazo.libs.database.sql.connection.HikariConnectionPoolFactory;
-import me.thedivazo.libs.database.sql.connection.factory.MysqlDataSource;
+import me.thedivazo.libs.database.jdbc.connection.ConnectionPool;
+import me.thedivazo.libs.database.jdbc.connection.ConnectionPoolFactory;
+import me.thedivazo.libs.database.jdbc.connection.HikariConnectionPoolFactory;
+import me.thedivazo.libs.database.jdbc.sql.connection.factory.MysqlDataSource;
 import me.thedivazo.libs.tests.database.dao.entity.BinaryIdPlayerEntity;
 import me.thedivazo.libs.tests.database.dao.impl.MySqlJooqDaoImpl;
 import org.junit.jupiter.api.AfterAll;

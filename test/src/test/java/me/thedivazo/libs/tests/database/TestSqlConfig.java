@@ -3,7 +3,7 @@ package me.thedivazo.libs.tests.database;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.thedivazo.libs.database.configsource.MonoDatabaseConfig;
-import me.thedivazo.libs.database.configsource.SQLDatabaseConfig;
+import me.thedivazo.libs.database.jdbc.configsource.SQLDatabaseConfig;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-group = 'me.thedivazo.libs.database.sql'
+group = 'me.thedivazo.libs'
 version = '1.0-SNAPSHOT'
 
 dependencies {

@@ -1,6 +1,6 @@
 package me.thedivazo.libs.database.dao;
 
-import me.thedivazo.libs.database.sql.connection.ConnectionPool;
+import me.thedivazo.libs.database.jdbc.connection.ConnectionPool;
 import me.thedivazo.libs.database.util.LazyCheckedSpliterator;
 import me.thedivazo.libs.util.Mapper;
 import me.thedivazo.libs.util.function.CheckedFunction;
