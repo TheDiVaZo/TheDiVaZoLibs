@@ -1,6 +1,5 @@
 package me.thedivazo.libs.database.dao;
 
-import me.thedivazo.libs.database.jdbc.connection.ConnectionPool;
 import me.thedivazo.libs.database.util.LazyCheckedSpliterator;
 import me.thedivazo.libs.util.Mapper;
 import me.thedivazo.libs.util.function.CheckedFunction;
@@ -8,6 +7,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.jetbrains.annotations.Nullable;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,15 +29,15 @@ import static org.apache.commons.dbutils.DbUtils.close;
  * реализацией с использованием DLS. Например: {@link JooqDao<T,ID> }
  **/
 public abstract class JdbcDao<T, ID> implements Dao<T, ID> {
-    protected final ConnectionPool pool;
+    protected final DataSource pool;
     protected final QueryRunner runner;
     protected final ResultSetHandler<T> resultSetHandler;
     protected final String tableName;
     protected final String keyIdentifier;
 
-    protected JdbcDao(String tableName, String keyIdentifier, ConnectionPool pool, ResultSetHandler<T> resultSetHandler) {
+    protected JdbcDao(String tableName, String keyIdentifier, DataSource pool, ResultSetHandler<T> resultSetHandler) {
         this.pool = pool;
-        this.runner = new QueryRunner(pool.getPooledDataSource());
+        this.runner = new QueryRunner(pool);
         this.resultSetHandler = resultSetHandler;
         this.tableName = tableName;
         this.keyIdentifier = keyIdentifier;
